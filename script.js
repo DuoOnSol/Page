@@ -135,11 +135,28 @@ function endGame(win) {
     ballSpeedX = 0;
     ballSpeedY = 0;
     restartButton.style.display = "block";
+    canvas.style.opacity = 0.6;
 }
 
 // 重新開始遊戲
 function restartGame() {
-    location.reload();
+    ballX = canvas.width / 2;
+    ballY = canvas.height - 30;
+    ballSpeedX = 5;
+    ballSpeedY = -5;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    score = 0;
+
+    // 重置所有磚塊
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+            bricks[c][r].status = 1;
+        }
+    }
+
+    restartButton.style.display = "none";
+    canvas.style.opacity = 1;
+    draw();
 }
 
 // 繪製遊戲
