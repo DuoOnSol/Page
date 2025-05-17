@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-    </div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Message Board</title>
@@ -11,11 +8,14 @@
     <script defer src="src/MessageBoard.js"></script>
 </head>
 <body>
-        <!-- 新增的按鈕區域 -->
-    <div class="navbar">
-        <button onclick="location.href='index.html'">Home</button>
-        <button onclick="location.href='game.html'">Game</button>
-        <button onclick="location.href='msg.html'">Msg board</button>
+    <!-- Navigation Buttons -->
+    <div class="navbar mb-4 flex gap-4 p-4 bg-gray-200">
+        <button onclick="location.href='index.html'" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Home</button>
+        <button onclick="location.href='game.html'" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Game</button>
+        <button onclick="location.href='msg.html'" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Msg Board</button>
+    </div>
+
+    <!-- React Root -->
     <div id="app"></div>
 </body>
 </html>
