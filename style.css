@@ -34,11 +34,14 @@ canvas {
     margin: auto;
     border: 2px solid #000;
     margin-top: 20px;
+    width: 800px;  /* 設定與 Canvas 相同的寬度 */
+    height: 600px; /* 設定與 Canvas 相同的高度 */
 }
 
-/* 背景圖片 (僅遊戲頁面) */
+/* 背景圖片 (遊戲頁面) */
 body.game-page {
     background-image: url("images/background.jpg");
-    background-size: cover;
-    background-position: center;
+    background-size: 800px 600px; /* 與 Canvas 大小匹配 */
+    background-repeat: no-repeat;
+    background-position: center center;
 }
