@@ -1,13 +1,24 @@
+/* 設定背景圖片 */
 body {
     margin: 0;
     overflow: hidden;
-    background-image: url("image/duo400m.png");
+    background-image: url("images/duo400m.png");
     background-size: cover;
     background-position: center;
 }
 
+/* Twitter widget 樣式 */
+h1 {
+    color: white;
+    text-align: center;
+    font-size: 2em;
+    margin-top: 20px;
+}
+
+/* 遊戲 Canvas 樣式 */
 canvas {
     display: block;
     margin: auto;
     border: 2px solid #000;
+    margin-top: 20px;
 }
