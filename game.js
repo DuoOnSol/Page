@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const loadRandomImage = async () => {
         try {
-            const response = await fetch('/images');
+            const response = await fetch('/image');
             const files = await response.json();
             const randomImage = files[Math.floor(Math.random() * files.length)];
-            backgroundImage = `/images/${randomImage}`;
+            backgroundImage = `/image/${randomImage}`;
         } catch (error) {
             console.error("Error loading images:", error);
         }
