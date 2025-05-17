@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const loadRandomImage = async () => {
         try {
-            const response = await fetch('image/');
+            const response = await fetch('./image/image.json');
             const files = await response.json();
             const randomImage = files[Math.floor(Math.random() * files.length)];
             backgroundImage = `/image/${randomImage}`;
