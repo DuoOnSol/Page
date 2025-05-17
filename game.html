@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> $duo Retro Game</title>
+    <title>$duo Retro Game</title>
     <style>
         body {
             margin: 0;
@@ -23,6 +23,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         .navbar button:hover {
             background-color: #0056b3;
@@ -39,12 +40,12 @@
     <div class="navbar">
         <button onclick="location.href='index.html'">Home</button>
         <button onclick="location.href='game.html'">Game</button>
-
+        <button onclick="location.href='msg.html'">Msg board</button>
     </div>
 
     <!-- 畫布區域 -->
     <canvas id="snake" width="1024" height="1024"></canvas>
 
-    <script src="game.js"></script>
+    <script src="snake.js"></script>
 </body>
 </html>
