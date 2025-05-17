@@ -7,13 +7,19 @@
             margin: 0;
             background-color: #f9f9f9;
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .navbar {
             display: flex;
             justify-content: center;
             background-color: #333;
             padding: 10px;
-            margin-bottom: 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
         }
         .navbar button {
             margin: 0 10px;
@@ -28,10 +34,19 @@
         .navbar button:hover {
             background-color: #0056b3;
         }
+        .game-container {
+            margin-top: 80px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
         canvas {
-            display: block;
-            margin: 0 auto;
             background-color: #000;
+            max-width: 608px;
+            width: 100%;
+            height: auto;
+            border: 10px solid #388e3c;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -43,7 +58,9 @@
     </div>
 
     <!-- 畫布區域 -->
-    <canvas id="snake" width="1024" height="1024"></canvas>
+    <div class="game-container">
+        <canvas id="snake" width="608" height="608"></canvas>
+    </div>
 
     <script src="game.js"></script>
 </body>
