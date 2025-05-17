@@ -1,24 +1,44 @@
-/* 設定背景圖片 */
+/* 通用樣式 */
 body {
     margin: 0;
-    overflow: hidden;
-    background-image: url("images/duo400m.png");
-    background-size: cover;
-    background-position: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-/* Twitter widget 樣式 */
+/* 頁面標題 */
 h1 {
-    color: white;
-    text-align: center;
-    font-size: 2em;
+    color: #333;
     margin-top: 20px;
 }
 
-/* 遊戲 Canvas 樣式 */
+/* 導航樣式 */
+nav {
+    background-color: #333;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+nav a:hover {
+    color: #00ff00;
+}
+
+/* 遊戲 Canvas */
 canvas {
     display: block;
     margin: auto;
     border: 2px solid #000;
     margin-top: 20px;
+}
+
+/* 背景圖片 (僅遊戲頁面) */
+body.game-page {
+    background-image: url("images/background.jpg");
+    background-size: cover;
+    background-position: center;
 }
