@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { useState, useEffect } from "react";
 
 const MessageBoard = () => {
     const [messages, setMessages] = useState([]);
@@ -54,4 +56,5 @@ const MessageBoard = () => {
     );
 };
 
-export default MessageBoard;
+const root = ReactDOM.createRoot(document.getElementById("app"));
+root.render(<MessageBoard />);
