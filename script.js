@@ -1,6 +1,10 @@
 // 遊戲設定
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const restartButton = document.createElement("button");
+restartButton.id = "restart-btn";
+restartButton.textContent = "Restart";
+document.body.appendChild(restartButton);
 
 canvas.width = 800;
 canvas.height = 600;
@@ -40,6 +44,7 @@ let score = 0;
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
 document.addEventListener("mousemove", mouseMoveHandler);
+restartButton.addEventListener("click", restartGame);
 
 function keyDownHandler(e) {
     if (e.key === "Right" || e.key === "ArrowRight") {
@@ -117,13 +122,24 @@ function collisionDetection() {
                     b.status = 0;
                     score++;
                     if (score === brickRowCount * brickColumnCount) {
-                        alert("🎉 恭喜你贏了！");
-                        document.location.reload();
+                        endGame(true);
                     }
                 }
             }
         }
     }
+}
+
+// 結束遊戲
+function endGame(win) {
+    ballSpeedX = 0;
+    ballSpeedY = 0;
+    restartButton.style.display = "block";
+}
+
+// 重新開始遊戲
+function restartGame() {
+    location.reload();
 }
 
 // 繪製遊戲
@@ -144,8 +160,7 @@ function draw() {
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
             ballSpeedY = -ballSpeedY;
         } else {
-            alert("遊戲結束");
-            document.location.reload();
+            endGame(false);
         }
     }
 
