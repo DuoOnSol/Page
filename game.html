@@ -6,16 +6,36 @@
     <title>Brick Mini Game</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* 背景圖片設定 */
         body.game-page {
+            position: relative;
+            background-color: #000;
+        }
+        
+        .background-overlay {
             background-image: url('image/duo400m.png');
             background-size: cover;
-            background-position: center center;
+            background-position: center;
             background-repeat: no-repeat;
-            opacity: 0.5; /* 50% 透明度 */
+            opacity: 0.5;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* 確保 Canvas 在背景之上 */
+        #gameCanvas {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body class="game-page">
+    <div class="background-overlay"></div>
+    
     <nav>
         <a href="index.html">Find the latest News</a>
         <a href="game.html">🎮 Brick Game</a>
