@@ -1,65 +1,28 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Clarity</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script type="text/javascript" src="Clarity.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Puzzle Game</title>
+    <link href="styles.css" rel="stylesheet">
+    <script defer src="game.js"></script>
 </head>
-
-<body>
-    <!-- 新增的按鈕區域 -->
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <!-- 新增的按鈕區域 -->
     <div class="navbar">
         <button onclick="location.href='index.html'">Home</button>
         <button onclick="location.href='game.html'">Game</button>
     </div>
-
-    <canvas id="canvas"></canvas>
-
-    <p>
-        Use the left, right and up arrow keys to move.
-    </p>
-
-    <p class="info">
-        The map data is fully customisable and scriptable (all contained within the "map" variable). See the comments in the code for instructions.
-    </p>
-
-    <label for="viewport">
-        <input type="checkbox" id="viewport" onclick="game.limit_viewport=this.checked;" checked/> Confine viewport to map
-    </label>
-
-    <script type="text/javascript">
-        window.requestAnimFrame =
-            window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function(callback) {
-                return window.setTimeout(callback, 1000 / 60);
-        };
-
-        var canvas = document.getElementById('canvas'),
-            ctx    = canvas.getContext('2d');
-
-        canvas.width = 400;
-        canvas.height = 400;
-        
-        var game = new Clarity();
-        game.set_viewport(canvas.width, canvas.height);
-        game.load_map(map);
-        game.limit_viewport = true;
-
-        var Loop = function() {
-            ctx.fillStyle = '#333';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            game.update();
-            game.draw(ctx);
-            window.requestAnimFrame(Loop);
-        };
-
-        Loop();
-    </script>
+    
+    <h1 class="text-4xl font-bold mb-6">Sliding Puzzle Game</h1>
+    <div id="game-container"></div>
+    <div class="text-center mt-4">
+        <div id="move-counter" class="text-lg font-bold">Moves: 0</div>
+        <div id="time-counter" class="text-lg font-bold">Time: 0 seconds</div>
+    </div>
+    <div id="victory-screen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 hidden">
+        <img src="/duo/victory.gif" alt="Victory" class="w-96 h-96" />
+        <audio id="victory-music" src="/duo/music.midi" loop></audio>
+    </div>
 </body>
-
 </html>
