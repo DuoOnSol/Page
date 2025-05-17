@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Snake Game</title>
+    <title>Duo Snake Game</title>
     <style>
         body {
             margin: 0;
             background-color: #f9f9f9;
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .navbar {
             display: flex;
-            justify-content: center;
+            gap: 10px;
             background-color: #333;
-            padding: 10px;
-            margin-bottom: 20px;
+            padding: 15px;
+            width: 100%;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
         }
+
         .navbar button {
-            margin: 0 10px;
             padding: 10px 20px;
             color: #fff;
             background-color: #007bff;
@@ -24,13 +32,16 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .navbar button:hover {
             background-color: #0056b3;
         }
+
         canvas {
-            display: block;
-            margin: 0 auto;
-            background-color: #000;
+            margin-top: 80px; /* 避免被 navbar 遮住 */
+            background-color: #aad751;
+            border: 10px solid #388e3c;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -39,6 +50,7 @@
     <div class="navbar">
         <button onclick="location.href='index.html'">Home</button>
         <button onclick="location.href='game.html'">Game</button>
+        <button onclick="location.href='msg.html'">Msg board</button>
     </div>
 
     <!-- 畫布區域 -->
