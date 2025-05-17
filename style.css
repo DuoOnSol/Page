@@ -1,47 +1,43 @@
-/* 通用樣式 */
+* {
+	margin: 0;
+	padding: 0;
+}
+
 body {
-    margin: 0;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    text-align: center;
+	background: #f2f2f2;
 }
 
-/* 頁面標題 */
-h1 {
-    color: #333;
-    margin-top: 20px;
-}
-
-/* 導航樣式 */
-nav {
-    background-color: #333;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-weight: bold;
-}
-nav a:hover {
-    color: #00ff00;
-}
-
-/* 遊戲 Canvas */
 canvas {
-    display: block;
-    margin: auto;
-    border: 2px solid #000;
-    margin-top: 20px;
-    width: 800px;  /* 設定與 Canvas 相同的寬度 */
-    height: 600px; /* 設定與 Canvas 相同的高度 */
+	display: block;
+	margin: 40px auto 20px;
+	border: 1px solid #333;
+
+	-webkit-box-shadow: 0 0 16px 2px rgba(0,0,0,0.8);
+	box-shadow: 0 0 16px 2px rgba(0,0,0,0.8);
 }
 
-/* 背景圖片 (遊戲頁面) */
-body.game-page {
-    background-image: url("image/duo400m.jpg");
-    background-size: 100vw 100vh; /* 完全匹配 Canvas 大小 */
-    background-repeat: no-repeat;
-    background-position: center center;
+p {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 19px;
+	color: #777;
+	display: block;
+	width: 400px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.info {
+	margin: 14px auto;
+	text-align: justify;
+	font-size: 18px;
+	color: #999;
+}
+
+label {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	color: #555;
+	width: 400px;
+	margin: 0 auto;
+	display: block;
 }
