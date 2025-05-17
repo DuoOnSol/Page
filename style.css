@@ -40,8 +40,8 @@ canvas {
 
 /* 背景圖片 (遊戲頁面) */
 body.game-page {
-    background-image: url("images/duo400m.jpg");
-    background-size: 800px 600px; /* 完全匹配 Canvas 大小 */
+    background-image: url("images/duo400m.png");
+    background-size: 100vw 100vh; /* 完全匹配 Canvas 大小 */
     background-repeat: no-repeat;
     background-position: center center;
 }
