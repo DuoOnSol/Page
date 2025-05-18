@@ -8,13 +8,13 @@ const CYBERTRUCK_HEIGHT = 32 * 1.45;
 const ROCKET_WIDTH = 60;
 const ROCKET_HEIGHT = 120;
 const BLUE_ZONE_HEIGHT = 150;
-const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
+const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 7;
 const MIN_GAP = CYBERTRUCK_WIDTH + 50;
 const INITIAL_JUMP_VELOCITY = -10;
 const SECOND_JUMP_VELOCITY = -5;
 const GLIDE_REDUCE = -2;
 const ROCKET_SPEED = 1;
-const ROCKET_RESPAWN_DELAY = 10000; // 火箭重生間隔
+const ROCKET_RESPAWN_DELAY = 10000;
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -61,7 +61,8 @@ function resetTrucks() {
             speed: 4 + Math.random() * 4,
             direction: Math.random() < 0.5 ? -1 : 1,
             maxOffset: 50 + Math.random() * 100,
-            baseX: canvas.width + i * 300
+            baseX: canvas.width + i * 300,
+            isSnake: i === 0 // 只有第一台車會蛇行
         });
     }
 }
@@ -120,9 +121,13 @@ function drawTrucks() {
     if (gameStarted) {
         trucks.forEach(truck => {
             truck.x -= truck.speed;
-            truck.baseX += truck.direction * 1.5;
-            if (Math.abs(truck.baseX - truck.x) > truck.maxOffset) {
-                truck.direction *= -1;
+            
+            // 蛇行效果
+            if (truck.isSnake) {
+                truck.y += truck.direction * 2;
+                if (truck.y < canvas.height - CYBERTRUCK_HEIGHT - 40 || truck.y > canvas.height - CYBERTRUCK_HEIGHT) {
+                    truck.direction *= -1;
+                }
             }
 
             ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
@@ -196,24 +201,6 @@ function update() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
-
-    if (isJumping) {
-        duoY += jumpVelocity;
-        jumpVelocity += 0.5;
-
-        if (isGliding && jumpVelocity > 0) {
-            jumpVelocity += GLIDE_REDUCE;
-        }
-
-        if (duoY >= canvas.height - DUO_HEIGHT) {
-            duoY = canvas.height - DUO_HEIGHT;
-            isJumping = false;
-            canDoubleJump = true;
-            firstJumpDone = false;
-            isGliding = false;
-        }
-    }
-
     drawDuo();
     drawTrucks();
     drawRocket();
@@ -237,24 +224,7 @@ document.addEventListener("keydown", (e) => {
             update();
         } else if (isGameOver) {
             resetGame();
-        } else if (!isJumping && !isGameOver) {
-            isJumping = true;
-            jumpVelocity = INITIAL_JUMP_VELOCITY;
-            firstJumpDone = true;
-        } else if (isJumping && canDoubleJump && !isGameOver && firstJumpDone) {
-            jumpVelocity = SECOND_JUMP_VELOCITY;
-            canDoubleJump = false;
         }
-
-        if (jumpVelocity > 0 && !isGameOver) {
-            isGliding = true;
-        }
-    }
-});
-
-document.addEventListener("keyup", (e) => {
-    if (e.code === "Space") {
-        isGliding = false;
     }
 });
 
