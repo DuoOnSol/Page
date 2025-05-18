@@ -22,32 +22,35 @@ let score = 0;
 let isGameOver = false;
 let gameStarted = false;
 
-// 初始化圖片
 const duoImg = new Image();
 duoImg.src = "./img/duo.png";
+
+duoImg.onload = () => console.log("✅ Duo image loaded");
+duoImg.onerror = () => console.error("❌ Failed to load duo.png");
 
 const truckImg = new Image();
 truckImg.src = "./img/cybertruck.png";
 
+truckImg.onload = () => console.log("✅ Truck image loaded");
+truckImg.onerror = () => console.error("❌ Failed to load cybertruck.png");
+
 const sparkImg = new Image();
 sparkImg.src = "./img/spark.png";
+
+sparkImg.onload = () => console.log("✅ Spark image loaded");
+sparkImg.onerror = () => console.error("❌ Failed to load spark.png");
 
 const backgroundImg = new Image();
 backgroundImg.src = "./img/road.png";
 
+backgroundImg.onload = () => console.log("✅ Background image loaded");
+backgroundImg.onerror = () => console.error("❌ Failed to load road.png");
+
 const deathSound = new Audio("./audio/death.mp3");
 
-// 圖片載入測試
-duoImg.onload = () => console.log("✅ Duo image loaded");
-truckImg.onload = () => console.log("✅ Truck image loaded");
-sparkImg.onload = () => console.log("✅ Spark image loaded");
-backgroundImg.onload = () => console.log("✅ Background image loaded");
+deathSound.onerror = () => console.error("❌ Failed to load death.mp3");
 
-// 圖片載入錯誤測試
-duoImg.onerror = () => console.error("❌ Failed to load duo.png");
-truckImg.onerror = () => console.error("❌ Failed to load cybertruck.png");
-sparkImg.onerror = () => console.error("❌ Failed to load spark.png");
-backgroundImg.onerror = () => console.error("❌ Failed to load road.png");
+deathSound.oncanplaythrough = () => console.log("✅ Death sound loaded");
 
 function drawBackground() {
     ctx.globalAlpha = 0.3;
@@ -77,7 +80,7 @@ function update() {
 
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 1.2;
+        jumpVelocity += 0.8;
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
@@ -125,7 +128,6 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// 確保所有圖片都載入完畢後再開始遊戲
 backgroundImg.onload = () => {
     duoImg.onload = () => {
         truckImg.onload = () => {
