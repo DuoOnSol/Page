@@ -83,7 +83,7 @@ function update() {
     // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 0.8;  // 減少重力加速度
+        jumpVelocity += 0.5;  // 減少重力加速度
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
