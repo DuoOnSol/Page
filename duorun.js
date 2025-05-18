@@ -23,11 +23,14 @@ function moveRocket(up) {
     rocket.style.top = rocketY + 'px';
 }
 
-// Add keyboard controls for rocket
-document.addEventListener('keydown', (event) => {
+// Add keyboard controls for rocket and restart
+function handleKeyPress(event) {
     if (event.key === 'ArrowUp') moveRocket(true);
     if (event.key === 'ArrowDown') moveRocket(false);
-});
+    if (event.key === ' ') resetGame();
+}
+
+document.addEventListener('keydown', handleKeyPress);
 
 // Ensure the rocket starts within the blue zone
 rocket.style.top = '20px';
@@ -42,6 +45,9 @@ function spawnCar() {
     car.style.top = (BLUE_ZONE_HEIGHT + 50 + Math.random() * (gameArea.offsetHeight - BLUE_ZONE_HEIGHT - 100)) + 'px';
     gameArea.appendChild(car);
 
+    let direction = Math.random() < 0.5 ? -1 : 1;
+    let horizontalOffset = 0;
+
     const carInterval = setInterval(() => {
         const carPosition = car.offsetLeft;
         if (carPosition < -100) {
@@ -50,7 +56,11 @@ function spawnCar() {
             score += 100;
             scoreElement.textContent = 'Score: ' + score;
         } else {
+            // Apply horizontal snake-like movement
+            horizontalOffset += direction * 5;
+            if (Math.random() < 0.05) direction *= -1; // Randomly change direction
             car.style.left = carPosition - 10 + 'px';
+            car.style.transform = `translateX(${horizontalOffset}px)`;
         }
 
         // Check collision
@@ -78,11 +88,12 @@ spawnCar();
 function gameOver() {
     gameRunning = false;
     gameOverElement.style.display = 'block';
-    gameOverElement.textContent = 'Game Over';
+    gameOverElement.textContent = 'Game Over - Press Space to Restart';
 }
 
 // Reset game
 function resetGame() {
+    if (gameRunning) return;  // Only reset if the game is over
     gameRunning = true;
     score = 0;
     scoreElement.textContent = 'Score: 0';
