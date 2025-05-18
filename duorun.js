@@ -60,8 +60,8 @@ function resetTrucks() {
             y: canvas.height - CYBERTRUCK_HEIGHT,
             speed: 4 + Math.random() * 4,
             direction: Math.random() < 0.5 ? -1 : 1,
-            maxOffset: 50 + Math.random() * 100,
-            baseX: canvas.width + i * 300,
+            maxOffset: 100 + Math.random() * 150, // 增加蛇行幅度
+            baseY: canvas.height - CYBERTRUCK_HEIGHT,
             isSnake: i === 0 // 只有第一台車會蛇行
         });
     }
@@ -124,8 +124,8 @@ function drawTrucks() {
             
             // 蛇行效果
             if (truck.isSnake) {
-                truck.y += truck.direction * 2;
-                if (truck.y < canvas.height - CYBERTRUCK_HEIGHT - 40 || truck.y > canvas.height - CYBERTRUCK_HEIGHT) {
+                truck.y += truck.direction * 4; // 增加蛇行幅度
+                if (truck.y < truck.baseY - 100 || truck.y > truck.baseY + 100) {
                     truck.direction *= -1;
                 }
             }
@@ -180,6 +180,53 @@ function drawRocket() {
         }
     }
 }
+
+// 畫火花
+function drawSpark(x, y) {
+    ctx.drawImage(sparkImg, x, y, 200, 200);
+}
+
+// 遊戲結束
+function gameOver() {
+    isGameOver = true;
+    deathSound.play();
+    drawSpark(duoX - 80, duoY - 100);
+    document.getElementById("gameOver").style.display = "block";
+    console.log("🛑 Game Over - Collision Detected");
+}
+
+// 遊戲更新邏輯
+function update() {
+    if (isGameOver) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
+    drawDuo();
+    drawTrucks();
+    drawRocket();
+    document.getElementById("score").innerText = "Score: " + score;
+    requestAnimationFrame(update);
+}
+
+// 監聽 Space 按鍵
+document.addEventListener("keydown", (e) => {
+    if (e.code === "Space") {
+        if (!gameStarted) {
+            gameStarted = true;
+            isJumping = true;
+            jumpVelocity = INITIAL_JUMP_VELOCITY;
+            canDoubleJump = true;
+            firstJumpDone = false;
+            bgMusic.play();
+            document.getElementById("startHint").style.display = "none";
+            document.getElementById("intro-image").style.display = "none";
+            resetRocket();
+            update();
+        } else if (isGameOver) {
+            resetGame();
+        }
+    }
+});
 
 // 初始化
 resetGame();
