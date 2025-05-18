@@ -2,6 +2,9 @@ body {
     margin: 0;
     background-color: #f9f9f9;
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .navbar {
@@ -9,10 +12,8 @@ body {
     justify-content: center;
     background-color: #333;
     padding: 10px;
-    position: fixed;
-    top: 0;
     width: 100%;
-    z-index: 1000;
+    margin-bottom: 20px;
 }
 
 .navbar button {
@@ -30,39 +31,30 @@ body {
     background-color: #0056b3;
 }
 
-.game-container {
-    margin-top: 80px;
+#game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-}
-
-canvas {
-    background-color: #ffffff;
-    border: 5px solid #388e3c;
+    background-color: #fff;
+    border: 2px solid #388e3c;
+    padding: 20px;
+    border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-#score {
-    font-size: 24px;
-    margin: 20px;
-    color: #333;
-    font-weight: bold;
+canvas {
+    background-color: #f0f0f0;
+    border: 2px solid #388e3c;
 }
 
-#game-over {
-    font-size: 4em;
-    color: red;
-    text-align: center;
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0,0,0,0.7);
-    padding: 20px 40px;
-    border-radius: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    z-index: 1000;
+#score {
+    font-size: 18px;
+    margin: 15px 0;
+    color: #333;
+}
+
+.hint {
+    font-size: 20px;
+    color: #777;
+    margin-bottom: 15px;
 }
