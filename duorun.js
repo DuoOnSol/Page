@@ -14,7 +14,7 @@ const INITIAL_JUMP_VELOCITY = -10;
 const SECOND_JUMP_VELOCITY = -5;
 const GLIDE_REDUCE = -2;
 const ROCKET_SPEED = 3;
-const ROCKET_RESPAWN_DELAY = 3000; // 火箭重生間隔
+const ROCKET_RESPAWN_DELAY = 10000; // 火箭重生間隔
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
