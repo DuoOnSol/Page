@@ -34,7 +34,7 @@ sparkImg.src = "img/spark.png";
 const backgroundImg = new Image();
 backgroundImg.src = "img/road.png";
 
-const deathSound = new Audio("audio/death.mp3");
+const deathSound = new Audio("audio/dead.mp3");
 
 function drawBackground() {
     ctx.globalAlpha = 0.3; // 淡化背景
