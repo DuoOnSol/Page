@@ -55,14 +55,17 @@ bgMusic.volume = 0.5;
 function resetTrucks() {
     trucks = [];
     for (let i = 0; i < 3; i++) {
+        const isSnake = i === 0; // 只有第一台車會蛇行
         trucks.push({
             x: canvas.width + i * 300,
             y: canvas.height - CYBERTRUCK_HEIGHT,
             speed: 4 + Math.random() * 4,
             direction: Math.random() < 0.5 ? -1 : 1,
-            maxOffset: 100 + Math.random() * 150, // 增加蛇行幅度
+            maxOffset: isSnake ? 100 + Math.random() * 150 : 0, // 增加蛇行幅度
             baseY: canvas.height - CYBERTRUCK_HEIGHT,
-            isSnake: i === 0 // 只有第一台車會蛇行
+            isSnake: isSnake,
+            snakeAmplitude: isSnake ? 100 + Math.random() * 50 : 0,
+            snakeAngle: Math.random() * Math.PI * 2
         });
     }
 }
@@ -124,10 +127,8 @@ function drawTrucks() {
             
             // 蛇行效果
             if (truck.isSnake) {
-                truck.y += truck.direction * 4; // 增加蛇行幅度
-                if (truck.y < truck.baseY - 100 || truck.y > truck.baseY + 100) {
-                    truck.direction *= -1;
-                }
+                truck.snakeAngle += 0.05; // 調整蛇行速度
+                truck.y = truck.baseY - truck.snakeAmplitude * Math.sin(truck.snakeAngle);
             }
 
             ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
