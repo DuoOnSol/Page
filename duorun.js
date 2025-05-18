@@ -9,24 +9,41 @@ let duo = {
     width: 32,
     height: 32,
     dy: 0,
-    jumpPower: -12,
-    gravity: 0.6,
+    jumpPower: -60,  // 調整跳躍高度 (5倍)
+    gravity: 2,
     image: new Image(),
 };
 
 duo.image.src = "img/duo.png";
 
-// 車子改成三倍大的 duo.jpg
-let truck = {
-    x: canvas.width,
-    y: 240,
-    width: 96,
-    height: 96,
-    speed: 6,
-    image: new Image(),
-};
+// 車子設定
+class Truck {
+    constructor(x, speed) {
+        this.x = x;
+        this.y = 320;
+        this.width = 96;
+        this.height = 64;
+        this.speed = speed;
+        this.image = new Image();
+        this.image.src = "img/cybertruck.png";
+    }
 
-truck.image.src = "img/cybertruck.jpg";
+    draw() {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
+
+    update() {
+        this.x -= this.speed;
+        if (this.x + this.width < 0) {
+            this.x = canvas.width + Math.random() * 300;
+        }
+    }
+}
+
+let trucks = [
+    new Truck(canvas.width, 6),
+    new Truck(canvas.width + 400, 9)
+];
 
 let score = 0;
 let isJumping = false;
@@ -42,9 +59,9 @@ document.addEventListener("keydown", (e) => {
         isGameStarted = true;
         isGameOver = false;
         score = 0;
-        truck.x = canvas.width;
         duo.y = 320;
         duo.dy = 0;
+        trucks.forEach(truck => truck.x = canvas.width + Math.random() * 300);
         document.getElementById("game-over").style.display = "none";
         draw();
     }
@@ -63,13 +80,24 @@ function draw() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(duo.image, duo.x, duo.y, duo.width, duo.height);
-    ctx.drawImage(truck.image, truck.x, truck.y, truck.width, truck.height);
 
-    truck.x -= truck.speed;
-    if (truck.x + truck.width < 0) {
-        truck.x = canvas.width + Math.random() * 300;
-        score++;
-    }
+    trucks.forEach(truck => {
+        truck.update();
+        truck.draw();
+
+        // 碰撞檢測
+        if (
+            duo.x < truck.x + truck.width &&
+            duo.x + duo.width > truck.x &&
+            duo.y < truck.y + truck.height &&
+            duo.y + duo.height > truck.y
+        ) {
+            deadSound.play();
+            isGameOver = true;
+            isGameStarted = false;
+            document.getElementById("game-over").style.display = "block";
+        }
+    });
 
     if (isJumping) {
         duo.dy += duo.gravity;
@@ -81,19 +109,7 @@ function draw() {
         }
     }
 
-    // 碰撞檢測
-    if (
-        duo.x < truck.x + truck.width &&
-        duo.x + duo.width > truck.x &&
-        duo.y < truck.y + truck.height &&
-        duo.y + duo.height > truck.y
-    ) {
-        deadSound.play();
-        isGameOver = true;
-        isGameStarted = false;
-        document.getElementById("game-over").style.display = "block";
-    }
-
+    score++;
     document.getElementById("score").textContent = "Score: " + score;
 
     requestAnimationFrame(draw);
