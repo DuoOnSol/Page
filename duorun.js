@@ -10,9 +10,9 @@ const ROCKET_HEIGHT = 120;
 const BLUE_ZONE_HEIGHT = 150;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 const MIN_GAP = CYBERTRUCK_WIDTH + 50;
-const INITIAL_JUMP_VELOCITY = -18;
-const SECOND_JUMP_VELOCITY = -9;
-const GLIDE_REDUCE = -5;
+const INITIAL_JUMP_VELOCITY = -10;  // 減慢初始跳躍速度
+const SECOND_JUMP_VELOCITY = -5;
+const GLIDE_REDUCE = -2;  // 減少滑翔的下降速度
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -70,7 +70,7 @@ function resetRockets() {
         rockets.push({
             x: canvas.width + 500 + i * 400,
             y: Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT),
-            speed: 8,
+            speed: 6,
             direction: Math.random() < 0.5 ? -1 : 1
         });
     }
@@ -113,7 +113,7 @@ function drawTrucks() {
     if (gameStarted) {
         trucks.forEach(truck => {
             truck.x -= truck.speed;
-            truck.baseX += truck.direction * 1.5; // 蛇行效果
+            truck.baseX += truck.direction * 1.5;
             if (Math.abs(truck.baseX - truck.x) > truck.maxOffset) {
                 truck.direction *= -1;
             }
@@ -126,6 +126,16 @@ function drawTrucks() {
                 truck.speed = 4 + Math.random() * 4;
                 score += 100;
             }
+
+            // 卡車碰撞
+            if (
+                duoX < truck.x + CYBERTRUCK_WIDTH &&
+                duoX + DUO_WIDTH > truck.x &&
+                duoY < truck.y + CYBERTRUCK_HEIGHT &&
+                duoY + DUO_HEIGHT > truck.y
+            ) {
+                gameOver();
+            }
         });
     }
 }
@@ -137,7 +147,6 @@ function drawRockets() {
             rocket.x -= rocket.speed;
             rocket.y += rocket.direction * 4;
             
-            // 限制火箭只能在藍色區域內移動
             if (rocket.y <= 0 || rocket.y >= BLUE_ZONE_HEIGHT - ROCKET_HEIGHT) {
                 rocket.direction *= -1;
             }
@@ -148,6 +157,16 @@ function drawRockets() {
             }
 
             ctx.drawImage(rocketImg, rocket.x, rocket.y, ROCKET_WIDTH, ROCKET_HEIGHT);
+
+            // 火箭碰撞
+            if (
+                duoX < rocket.x + ROCKET_WIDTH &&
+                duoX + DUO_WIDTH > rocket.x &&
+                duoY < rocket.y + ROCKET_HEIGHT &&
+                duoY + DUO_HEIGHT > rocket.y
+            ) {
+                gameOver();
+            }
         });
     }
 }
@@ -155,6 +174,15 @@ function drawRockets() {
 // 畫火花
 function drawSpark(x, y) {
     ctx.drawImage(sparkImg, x, y, 200, 200);
+}
+
+// 遊戲結束
+function gameOver() {
+    isGameOver = true;
+    deathSound.play();
+    drawSpark(duoX - 80, duoY - 100);
+    document.getElementById("gameOver").style.display = "block";
+    console.log("🛑 Game Over - Collision Detected");
 }
 
 // 遊戲更新邏輯
