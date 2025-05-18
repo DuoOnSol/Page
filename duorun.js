@@ -45,6 +45,7 @@ backgroundImg.src = "./img/road.png";
 const deathSound = new Audio("./audio/death.mp3");
 const bgMusic = new Audio("./audio/music.mid");
 bgMusic.loop = true;
+bgMusic.volume = 0.5;
 
 function drawBackground() {
     ctx.globalAlpha = 0.3;
@@ -129,6 +130,7 @@ function update() {
         ) {
             isGameOver = true;
             deathSound.play();
+            bgMusic.pause(); // 停止背景音樂
             drawSpark(duoX - 80, duoY - 100);
             document.getElementById("gameOver").style.display = "block";
             console.log("🛑 Game Over - Collision Detected");
@@ -151,6 +153,7 @@ document.addEventListener("keydown", (e) => {
             jumpVelocity = INITIAL_JUMP_VELOCITY;
             canDoubleJump = true;
             firstJumpDone = false;
+            bgMusic.play();  // 播放背景音樂
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
             update();
