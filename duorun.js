@@ -20,22 +20,7 @@ let canDoubleJump = true;
 let firstJumpDone = false;
 let isGliding = false;
 
-let trucks = [
-    { 
-        x: canvas.width, 
-        y: canvas.height - CYBERTRUCK_HEIGHT, 
-        speed: 6, 
-        verticalSpeed: 2, 
-        originalY: canvas.height - CYBERTRUCK_HEIGHT,
-        direction: 1 
-    },
-    { 
-        x: canvas.width + 300, 
-        y: canvas.height - CYBERTRUCK_HEIGHT, 
-        speed: 4 
-    }
-];
-
+let trucks = [];
 let score = 0;
 let isGameOver = false;
 let gameStarted = false;
@@ -58,27 +43,64 @@ const bgMusic = new Audio("./audio/music.mid");
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
 
+// 初始化卡車
+function resetTrucks() {
+    trucks = [
+        { 
+            x: canvas.width, 
+            y: canvas.height - CYBERTRUCK_HEIGHT, 
+            speed: 6, 
+            verticalSpeed: 2, 
+            originalY: canvas.height - CYBERTRUCK_HEIGHT,
+            direction: 1 
+        },
+        { 
+            x: canvas.width + 300, 
+            y: canvas.height - CYBERTRUCK_HEIGHT, 
+            speed: 4 
+        }
+    ];
+}
+
+// 重置遊戲狀態
+function resetGame() {
+    duoY = canvas.height - DUO_HEIGHT;
+    jumpVelocity = 0;
+    isJumping = false;
+    isGliding = false;
+    score = 0;
+    isGameOver = false;
+    gameStarted = false;
+    resetTrucks();
+    document.getElementById("gameOver").style.display = "none";
+    document.getElementById("startHint").style.display = "block";
+    document.getElementById("intro-image").style.display = "block";
+    bgMusic.currentTime = 0;
+    bgMusic.pause();
+}
+
+// 畫背景
 function drawBackground() {
     ctx.globalAlpha = 0.3;
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     ctx.globalAlpha = 1.0;
 }
 
+// 畫 Duo
 function drawDuo() {
     if (gameStarted) {
         ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
     }
 }
 
+// 畫卡車
 function drawTrucks() {
     if (gameStarted) {
         trucks.forEach((truck, index) => {
-            // 如果是第一台卡車，讓它上下滑行
             if (index === 0) {
                 const laneHeight = CYBERTRUCK_HEIGHT * 3;
                 truck.y += truck.verticalSpeed * truck.direction;
 
-                // 如果超過車道範圍，反轉方向
                 if (truck.y > truck.originalY || truck.y < truck.originalY - laneHeight) {
                     truck.direction *= -1;
                 }
@@ -89,27 +111,26 @@ function drawTrucks() {
     }
 }
 
+// 畫火花
 function drawSpark(x, y) {
     ctx.drawImage(sparkImg, x, y, 200, 200);
 }
 
+// 遊戲更新邏輯
 function update() {
     if (isGameOver) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
 
-    // 處理跳躍和滑翔邏輯
     if (isJumping) {
         duoY += jumpVelocity;
         jumpVelocity += 0.5;
 
-        // 如果在滑翔，減緩下降速度
         if (isGliding && jumpVelocity > 0) {
             jumpVelocity += GLIDE_REDUCE;
         }
 
-        // 落地檢查
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
@@ -119,12 +140,10 @@ function update() {
         }
     }
 
-    // 移動卡車並檢查碰撞
     for (let i = 0; i < trucks.length; i++) {
         const truck = trucks[i];
         const nextTruck = trucks[i + 1];
 
-        // 卡車排隊邏輯
         if (nextTruck) {
             const distanceToNext = nextTruck.x - (truck.x + CYBERTRUCK_WIDTH);
             if (distanceToNext < MIN_GAP) {
@@ -136,14 +155,12 @@ function update() {
 
         truck.x -= truck.speed;
         
-        // 如果卡車超出畫布，重置位置並增加分數
         if (truck.x < -CYBERTRUCK_WIDTH) {
             truck.x = canvas.width + Math.random() * 300;
             truck.speed = 4 + Math.random() * 4;
             score += 100;
         }
 
-        // 碰撞檢測
         if (
             duoX < truck.x + CYBERTRUCK_WIDTH &&
             duoX + DUO_WIDTH > truck.x &&
@@ -166,7 +183,7 @@ function update() {
     requestAnimationFrame(update);
 }
 
-// 處理 Space 按鍵啟動遊戲和跳躍
+// 監聽 Space 按鍵
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
         if (!gameStarted) {
@@ -179,6 +196,8 @@ document.addEventListener("keydown", (e) => {
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
             update();
+        } else if (isGameOver) {
+            resetGame();
         } else if (!isJumping && !isGameOver) {
             isJumping = true;
             jumpVelocity = INITIAL_JUMP_VELOCITY;
@@ -188,7 +207,6 @@ document.addEventListener("keydown", (e) => {
             canDoubleJump = false;
         }
 
-        // 啟動滑翔
         if (jumpVelocity > 0 && !isGameOver) {
             isGliding = true;
         }
@@ -200,3 +218,6 @@ document.addEventListener("keyup", (e) => {
         isGliding = false;
     }
 });
+
+// 初始化
+resetGame();
