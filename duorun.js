@@ -13,7 +13,8 @@ const MIN_GAP = CYBERTRUCK_WIDTH + 50;
 const INITIAL_JUMP_VELOCITY = -10;
 const SECOND_JUMP_VELOCITY = -5;
 const GLIDE_REDUCE = -2;
-const ROCKET_SPEED = 3;  // 減慢火箭速度
+const ROCKET_SPEED = 3;
+const ROCKET_RESPAWN_DELAY = 3000; // 火箭重生間隔
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -27,6 +28,7 @@ let isGameOver = false;
 let gameStarted = false;
 let trucks = [];
 let rocket = null;
+let rocketCooldown = false;
 
 // 初始化圖片
 const duoImg = new Image();
@@ -66,12 +68,18 @@ function resetTrucks() {
 
 // 初始化火箭
 function resetRocket() {
-    rocket = {
-        x: canvas.width + 500,
-        y: Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT),
-        speed: ROCKET_SPEED,
-        direction: Math.random() < 0.5 ? -1 : 1
-    };
+    if (!rocketCooldown) {
+        rocket = {
+            x: canvas.width + 500,
+            y: Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT),
+            speed: ROCKET_SPEED,
+            direction: Math.random() < 0.5 ? -1 : 1
+        };
+        rocketCooldown = true;
+        setTimeout(() => {
+            rocketCooldown = false;
+        }, ROCKET_RESPAWN_DELAY);
+    }
 }
 
 // 重置遊戲
@@ -84,7 +92,8 @@ function resetGame() {
     isGameOver = false;
     gameStarted = false;
     resetTrucks();
-    resetRocket();
+    rocket = null;
+    rocketCooldown = false;
     document.getElementById("gameOver").style.display = "none";
     document.getElementById("startHint").style.display = "block";
     document.getElementById("intro-image").style.display = "block";
@@ -149,8 +158,8 @@ function drawRocket() {
         }
 
         if (rocket.x < -ROCKET_WIDTH) {
-            rocket.x = canvas.width + Math.random() * 500;
-            rocket.y = Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT);
+            rocket = null;
+            setTimeout(resetRocket, ROCKET_RESPAWN_DELAY);
         }
 
         ctx.drawImage(rocketImg, rocket.x, rocket.y, ROCKET_WIDTH, ROCKET_HEIGHT);
@@ -224,6 +233,7 @@ document.addEventListener("keydown", (e) => {
             bgMusic.play();
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
+            resetRocket();
             update();
         } else if (isGameOver) {
             resetGame();
