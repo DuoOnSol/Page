@@ -12,6 +12,7 @@ let duoY = canvas.height - DUO_HEIGHT;
 let isJumping = false;
 let jumpVelocity = 0;
 let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
+let canDoubleJump = true;
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -36,6 +37,8 @@ const backgroundImg = new Image();
 backgroundImg.src = "./img/road.png";
 
 const deathSound = new Audio("./audio/death.mp3");
+const bgMusic = new Audio("./audio/music.mid");
+bgMusic.loop = true;
 
 // 圖片載入測試
 duoImg.onload = () => console.log("✅ Duo image loaded");
@@ -83,10 +86,13 @@ function update() {
     // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 0.5;  // 減少重力加速度
+        jumpVelocity += 0.5;
+        
+        // 落地檢查
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
+            canDoubleJump = true;  // 允許再次跳躍
         }
     }
 
@@ -120,19 +126,26 @@ function update() {
     requestAnimationFrame(update);
 }
 
-// 處理 Space 按鍵啟動遊戲
+// 處理 Space 按鍵啟動遊戲和跳躍
 document.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && !gameStarted) {
-        gameStarted = true;
-        isJumping = true;
-        jumpVelocity = -18;
-        document.getElementById("startHint").style.display = "none";
-        document.getElementById("intro-image").style.display = "none"; // 隱藏 intro 圖片
-        update();
-    } else if (e.code === "Space" && !isJumping && !isGameOver) {
-        isJumping = true;
-        jumpVelocity = -18;
+    if (e.code === "Space") {
+        if (!gameStarted) {
+            gameStarted = true;
+            isJumping = true;
+            jumpVelocity = -18;
+            canDoubleJump = true;
+            document.getElementById("startHint").style.display = "none";
+            document.getElementById("intro-image").style.display = "none";
+            update();
+        } else if (!isJumping && !isGameOver) {
+            isJumping = true;
+            jumpVelocity = -18;
+        } else if (isJumping && canDoubleJump && !isGameOver) {
+            jumpVelocity = -18;
+            canDoubleJump = false;  // 禁止再次二段跳
+        }
     }
+
     if (e.code === "Space" && isGameOver) {
         location.reload();
     }
