@@ -24,22 +24,30 @@ let gameStarted = false;
 
 const duoImg = new Image();
 duoImg.src = "img/duo.png";
+duoImg.onload = () => console.log("✅ Duo image loaded");
+duoImg.onerror = () => console.error("❌ Failed to load duo.png");
 
 const truckImg = new Image();
 truckImg.src = "img/cybertruck.png";
+truckImg.onload = () => console.log("✅ Truck image loaded");
+truckImg.onerror = () => console.error("❌ Failed to load cybertruck.png");
 
 const sparkImg = new Image();
 sparkImg.src = "img/spark.png";
+sparkImg.onload = () => console.log("✅ Spark image loaded");
+sparkImg.onerror = () => console.error("❌ Failed to load spark.png");
 
 const backgroundImg = new Image();
 backgroundImg.src = "img/road.png";
+backgroundImg.onload = () => console.log("✅ Background image loaded");
+backgroundImg.onerror = () => console.error("❌ Failed to load road.png");
 
-const deathSound = new Audio("audio/dead.mp3");
+const deathSound = new Audio("audio/death.mp3");
 
 function drawBackground() {
-    ctx.globalAlpha = 0.3; // 淡化背景
+    ctx.globalAlpha = 0.3;
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-    ctx.globalAlpha = 1.0; // 恢復正常透明度
+    ctx.globalAlpha = 1.0;
 }
 
 function drawDuo() {
@@ -60,11 +68,8 @@ function update() {
     if (isGameOver) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 畫背景
     drawBackground();
 
-    // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
         jumpVelocity += 1.2;
@@ -82,7 +87,6 @@ function update() {
             score++;
         }
 
-        // 碰撞偵測
         if (
             duoX < truck.x + CYBERTRUCK_WIDTH &&
             duoX + DUO_WIDTH > truck.x &&
@@ -93,6 +97,7 @@ function update() {
             deathSound.play();
             drawSpark(duoX - 80, duoY - 100);
             document.getElementById("gameOver").style.display = "block";
+            console.log("🛑 Game Over - Collision Detected");
             return;
         }
     });
@@ -119,6 +124,7 @@ backgroundImg.onload = () => {
     duoImg.onload = () => {
         truckImg.onload = () => {
             sparkImg.onload = () => {
+                console.log("🚀 All images loaded, starting game...");
                 update();
             };
         };
