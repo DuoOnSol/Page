@@ -12,7 +12,6 @@ let duoY = canvas.height - DUO_HEIGHT;
 let isJumping = false;
 let jumpVelocity = 0;
 let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
-let gravity = 1.5;  // 調整掉落速度
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -24,12 +23,15 @@ let isGameOver = false;
 let gameStarted = false;
 
 const duoImg = new Image();
-duoImg.src = "img/food.png";
+duoImg.src = "img/duo.png";
 
 const truckImg = new Image();
 truckImg.src = "img/cybertruck.png";
 
-const deathSound = new Audio("audio/death.mp3"); // 加入死亡音效
+const sparkImg = new Image();
+sparkImg.src = "img/spark.png";
+
+const deathSound = new Audio("audio/death.mp3");
 
 function drawDuo() {
     ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
@@ -41,6 +43,10 @@ function drawTrucks() {
     });
 }
 
+function drawSpark(x, y) {
+    ctx.drawImage(sparkImg, x, y, 200, 200);
+}
+
 function update() {
     if (isGameOver) return;
 
@@ -49,14 +55,10 @@ function update() {
     // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += gravity;
-
-        // 到達最高點開始下降
+        jumpVelocity += 1.5;
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
-        } else if (duoY < maxJumpHeight) {
-            jumpVelocity = gravity;  // 到達最高點後掉落速度變慢
         }
     }
 
@@ -76,10 +78,10 @@ function update() {
             duoY + DUO_HEIGHT > truck.y
         ) {
             isGameOver = true;
-            document.getElementById("gameOver").style.display = "block";
             deathSound.play(); // 播放死亡音效
-            document.getElementById("startHint").style.display = "block";
-            document.getElementById("startHint").innerText = "Press Space to Restart";
+            drawSpark(duoX - 80, duoY - 100); // 顯示火花效果
+            document.getElementById("gameOver").style.display = "block";
+            return;
         }
     });
 
@@ -103,6 +105,8 @@ document.addEventListener("keydown", (e) => {
 
 duoImg.onload = () => {
     truckImg.onload = () => {
-        update();
+        sparkImg.onload = () => {
+            update();
+        };
     };
 };
