@@ -8,7 +8,8 @@ const CYBERTRUCK_HEIGHT = 32 * 1.45;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 const MIN_GAP = CYBERTRUCK_WIDTH + 50;
 const INITIAL_JUMP_VELOCITY = -18;
-const SECOND_JUMP_VELOCITY = -9; // 第二次跳的高度是第一次的一半
+const SECOND_JUMP_VELOCITY = -9;
+const GLIDE_REDUCE = -5; // 滑翔時減緩下降速度
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -17,6 +18,7 @@ let jumpVelocity = 0;
 let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
 let canDoubleJump = true;
 let firstJumpDone = false;
+let isGliding = false;
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -74,10 +76,15 @@ function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
 
-    // 處理跳躍邏輯
+    // 處理跳躍和滑翔邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 0.5;
+        jumpVelocity += 0.5;  // 重力
+
+        // 如果在滑翔，減緩下降速度
+        if (isGliding && jumpVelocity > 0) {
+            jumpVelocity += GLIDE_REDUCE;
+        }
 
         // 落地檢查
         if (duoY >= canvas.height - DUO_HEIGHT) {
@@ -85,6 +92,7 @@ function update() {
             isJumping = false;
             canDoubleJump = true;
             firstJumpDone = false;
+            isGliding = false;
         }
     }
 
@@ -93,7 +101,7 @@ function update() {
         const truck = trucks[i];
         const nextTruck = trucks[i + 1];
 
-        // 卡车行驶逻辑
+        // 卡車排隊邏輯
         if (nextTruck) {
             const distanceToNext = nextTruck.x - (truck.x + CYBERTRUCK_WIDTH);
             if (distanceToNext < MIN_GAP) {
@@ -154,9 +162,16 @@ document.addEventListener("keydown", (e) => {
             jumpVelocity = SECOND_JUMP_VELOCITY;
             canDoubleJump = false;
         }
-    }
 
-    if (e.code === "Space" && isGameOver) {
-        location.reload();
+        // 啟動滑翔
+        if (jumpVelocity > 0 && !isGameOver) {
+            isGliding = true;
+        }
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    if (e.code === "Space") {
+        isGliding = false;
     }
 });
