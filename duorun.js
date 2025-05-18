@@ -25,7 +25,7 @@ let truck = {
     image: new Image(),
 };
 
-truck.image.src = "img/food.png";
+truck.image.src = "img/cybertruck.png";
 
 let score = 0;
 let isJumping = false;
