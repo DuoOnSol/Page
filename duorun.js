@@ -22,10 +22,10 @@ let isGameOver = false;
 let gameStarted = false;
 
 const duoImg = new Image();
-duoImg.src = "duo.png";
+duoImg.src = "img/duo.png";
 
 const truckImg = new Image();
-truckImg.src = "cybertruck.png";
+truckImg.src = "img/cybertruck.png";
 
 function drawDuo() {
     ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
