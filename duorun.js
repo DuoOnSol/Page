@@ -181,52 +181,5 @@ function drawRocket() {
     }
 }
 
-// 畫火花
-function drawSpark(x, y) {
-    ctx.drawImage(sparkImg, x, y, 200, 200);
-}
-
-// 遊戲結束
-function gameOver() {
-    isGameOver = true;
-    deathSound.play();
-    drawSpark(duoX - 80, duoY - 100);
-    document.getElementById("gameOver").style.display = "block";
-    console.log("🛑 Game Over - Collision Detected");
-}
-
-// 遊戲更新邏輯
-function update() {
-    if (isGameOver) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBackground();
-    drawDuo();
-    drawTrucks();
-    drawRocket();
-    document.getElementById("score").innerText = "Score: " + score;
-    requestAnimationFrame(update);
-}
-
-// 監聽 Space 按鍵
-document.addEventListener("keydown", (e) => {
-    if (e.code === "Space") {
-        if (!gameStarted) {
-            gameStarted = true;
-            isJumping = true;
-            jumpVelocity = INITIAL_JUMP_VELOCITY;
-            canDoubleJump = true;
-            firstJumpDone = false;
-            bgMusic.play();
-            document.getElementById("startHint").style.display = "none";
-            document.getElementById("intro-image").style.display = "none";
-            resetRocket();
-            update();
-        } else if (isGameOver) {
-            resetGame();
-        }
-    }
-});
-
 // 初始化
 resetGame();
