@@ -5,7 +5,7 @@ const DUO_HEIGHT = 32;
 const DUO_WIDTH = 32;
 const CYBERTRUCK_WIDTH = 64;
 const CYBERTRUCK_HEIGHT = 32;
-const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
+const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 6;
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -87,7 +87,7 @@ function update() {
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !isJumping && !isGameOver) {
         isJumping = true;
-        jumpVelocity = -15;
+        jumpVelocity = -20;
         document.getElementById("startHint").style.display = "none";
         gameStarted = true;
     }
