@@ -10,9 +10,10 @@ const ROCKET_HEIGHT = 120;
 const BLUE_ZONE_HEIGHT = 150;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 const MIN_GAP = CYBERTRUCK_WIDTH + 50;
-const INITIAL_JUMP_VELOCITY = -10;  // 減慢初始跳躍速度
+const INITIAL_JUMP_VELOCITY = -10;
 const SECOND_JUMP_VELOCITY = -5;
-const GLIDE_REDUCE = -2;  // 減少滑翔的下降速度
+const GLIDE_REDUCE = -2;
+const ROCKET_SPEED = 3;  // 減慢火箭速度
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -25,7 +26,7 @@ let score = 0;
 let isGameOver = false;
 let gameStarted = false;
 let trucks = [];
-let rockets = [];
+let rocket = null;
 
 // 初始化圖片
 const duoImg = new Image();
@@ -64,16 +65,13 @@ function resetTrucks() {
 }
 
 // 初始化火箭
-function resetRockets() {
-    rockets = [];
-    for (let i = 0; i < 2; i++) {
-        rockets.push({
-            x: canvas.width + 500 + i * 400,
-            y: Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT),
-            speed: 6,
-            direction: Math.random() < 0.5 ? -1 : 1
-        });
-    }
+function resetRocket() {
+    rocket = {
+        x: canvas.width + 500,
+        y: Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT),
+        speed: ROCKET_SPEED,
+        direction: Math.random() < 0.5 ? -1 : 1
+    };
 }
 
 // 重置遊戲
@@ -86,7 +84,7 @@ function resetGame() {
     isGameOver = false;
     gameStarted = false;
     resetTrucks();
-    resetRockets();
+    resetRocket();
     document.getElementById("gameOver").style.display = "none";
     document.getElementById("startHint").style.display = "block";
     document.getElementById("intro-image").style.display = "block";
@@ -141,33 +139,31 @@ function drawTrucks() {
 }
 
 // 畫火箭
-function drawRockets() {
-    if (gameStarted) {
-        rockets.forEach(rocket => {
-            rocket.x -= rocket.speed;
-            rocket.y += rocket.direction * 4;
-            
-            if (rocket.y <= 0 || rocket.y >= BLUE_ZONE_HEIGHT - ROCKET_HEIGHT) {
-                rocket.direction *= -1;
-            }
+function drawRocket() {
+    if (gameStarted && rocket) {
+        rocket.x -= rocket.speed;
+        rocket.y += rocket.direction * 2;
+        
+        if (rocket.y <= 0 || rocket.y >= BLUE_ZONE_HEIGHT - ROCKET_HEIGHT) {
+            rocket.direction *= -1;
+        }
 
-            if (rocket.x < -ROCKET_WIDTH) {
-                rocket.x = canvas.width + Math.random() * 500;
-                rocket.y = Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT);
-            }
+        if (rocket.x < -ROCKET_WIDTH) {
+            rocket.x = canvas.width + Math.random() * 500;
+            rocket.y = Math.random() * (BLUE_ZONE_HEIGHT - ROCKET_HEIGHT);
+        }
 
-            ctx.drawImage(rocketImg, rocket.x, rocket.y, ROCKET_WIDTH, ROCKET_HEIGHT);
+        ctx.drawImage(rocketImg, rocket.x, rocket.y, ROCKET_WIDTH, ROCKET_HEIGHT);
 
-            // 火箭碰撞
-            if (
-                duoX < rocket.x + ROCKET_WIDTH &&
-                duoX + DUO_WIDTH > rocket.x &&
-                duoY < rocket.y + ROCKET_HEIGHT &&
-                duoY + DUO_HEIGHT > rocket.y
-            ) {
-                gameOver();
-            }
-        });
+        // 火箭碰撞
+        if (
+            duoX < rocket.x + ROCKET_WIDTH &&
+            duoX + DUO_WIDTH > rocket.x &&
+            duoY < rocket.y + ROCKET_HEIGHT &&
+            duoY + DUO_HEIGHT > rocket.y
+        ) {
+            gameOver();
+        }
     }
 }
 
@@ -211,7 +207,7 @@ function update() {
 
     drawDuo();
     drawTrucks();
-    drawRockets();
+    drawRocket();
     document.getElementById("score").innerText = "Score: " + score;
     requestAnimationFrame(update);
 }
