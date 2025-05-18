@@ -5,13 +5,14 @@ const DUO_HEIGHT = 32;
 const DUO_WIDTH = 32;
 const CYBERTRUCK_WIDTH = 64;
 const CYBERTRUCK_HEIGHT = 32;
-const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 10;
+const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
 let isJumping = false;
 let jumpVelocity = 0;
 let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
+let gravity = 1.5;  // 調整掉落速度
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -48,12 +49,14 @@ function update() {
     // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 2;
+        jumpVelocity += gravity;
+
+        // 到達最高點開始下降
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
         } else if (duoY < maxJumpHeight) {
-            jumpVelocity = 12;  // 到達最高點開始下降
+            jumpVelocity = gravity;  // 到達最高點後掉落速度變慢
         }
     }
 
@@ -75,6 +78,8 @@ function update() {
             isGameOver = true;
             document.getElementById("gameOver").style.display = "block";
             deathSound.play(); // 播放死亡音效
+            document.getElementById("startHint").style.display = "block";
+            document.getElementById("startHint").innerText = "Press Space to Restart";
         }
     });
 
