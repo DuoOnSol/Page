@@ -34,7 +34,9 @@ document.addEventListener('keydown', handleKeyPress);
 
 // Ensure the rocket starts within the blue zone
 rocket.style.top = '20px';
-rocket.style.left = 'calc(50% - 30px)';
+rocket.style.left = 'calc(50% - 20px)';
+rocket.style.width = '40px';
+rocket.style.height = '80px';
 
 // Generate cars at random intervals
 function spawnCar() {
