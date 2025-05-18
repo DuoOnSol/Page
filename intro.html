@@ -5,107 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duo Introduction</title>
     <style>
-body {
-    margin: 0;
-    background-color: #f9f9f9;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        body {
+            margin: 0;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-/* Navbar styles */
-.navbar {
-    display: flex;
-    justify-content: center;
-    background-color: #333;
-    padding: 10px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-}
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
 
-.navbar button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .navbar button {
+            margin: 5px 10px;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+            min-width: 120px;
+            max-width: 200px;
+        }
 
-.navbar button:hover {
-    background-color: #0056b3;
-}
+        .navbar button:hover {
+            background-color: #0056b3;
+        }
 
-/* Game Container Styles */
-#game-container {
-    width: 100%;
-    max-width: 1024px;
-    padding-top: 80px; /* Avoid overlap with navbar */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .content {
+            margin-top: 120px;
+            max-width: 90%;
+            width: 800px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: left;
+            line-height: 1.6;
+        }
 
-/* Canvas Styles */
-canvas {
-    width: 100%;
-    max-width: 800px;
-    background-color: #ffffff;
-    border: 5px solid #388e3c;
-    margin-bottom: 20px;
-}
+        h1 {
+            color: #388e3c;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-/* Score and Hint Styles */
-#score, #startHint, #gameOver {
-    color: #333;
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 10px;
-}
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
 
-/* Twitter feed */
-.sk-ww-twitter-feed {
-    width: 90%;
-    max-width: 2000px;
-    margin-bottom: 40px;
-}
+        a:hover {
+            text-decoration: underline;
+        }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar button {
-        margin: 5px;
-        padding: 8px 15px;
-        font-size: 0.9em;
-    }
+        img {
+            width: 100%;
+            max-width: 380px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
 
-    #score, #startHint, #gameOver {
-        font-size: 1.2em;
-    }
+        @media (max-width: 768px) {
+            .content {
+                margin-top: 140px;
+                width: 95%;
+                padding: 15px;
+            }
 
-    canvas {
-        width: 90%;
-    }
-}
+            h1 {
+                font-size: 1.8em;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <div class="navbar">
-       <button onclick="location.href='index.html'">Home</button>
+        <button onclick="location.href='index.html'">Home</button>
         <button onclick="location.href='intro.html'">What is Duo</button>
         <button onclick="location.href='game.html'">Game</button>
-        <button onclick="location.href='run.html'">Escape from Cybertruck, run !!!</button>
     </div>
 
     <!-- Content -->
     <div class="content">
         <h1>Duo Introduction</h1>
-        <img src="img/intro05.png" alt="Join the Cult">
         <p>
             Duo (Contract Address: KFTSxPQxDV1wGjEvzKHWD7mG6e9TsMVq4eF4mQppump) is the abbreviation for Duolingo, a Web2 multi-language learning platform that is publicly listed worldwide. The narrative begins with the death of Duolingo’s mascot, the owl:
         </p>
@@ -136,7 +133,6 @@ canvas {
         <p>
             The meme of the Owl being killed and revived has strong virality and cultural foundation, with a high likelihood of further fermentation. Join the Duo cult! 
         </p>
-        <img src="img/intro06.png" alt="Join the Cult">
         <img src="img/intro04.png" alt="Join the Cult">
     </div>
 </body>
