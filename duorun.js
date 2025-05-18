@@ -6,14 +6,19 @@ const DUO_WIDTH = 32;
 const CYBERTRUCK_WIDTH = 64 * 1.45;
 const CYBERTRUCK_HEIGHT = 32 * 1.45;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
-const MIN_GAP = CYBERTRUCK_WIDTH + 50; // 卡车之间的最小间距
+const MIN_GAP = CYBERTRUCK_WIDTH + 50;
+
+const JUMP_VELOCITY = -18;
+const GRAVITY = 0.5;
+const GLIDE_REDUCE = 0.1;
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
 let isJumping = false;
 let jumpVelocity = 0;
-let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
-let canDoubleJump = true;
+let gameStarted = false;
+let isGameOver = false;
+let isGliding = false;
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -21,10 +26,7 @@ let trucks = [
 ];
 
 let score = 0;
-let isGameOver = false;
-let gameStarted = false;
 
-// 初始化圖片
 const duoImg = new Image();
 duoImg.src = "./img/duo.png";
 
@@ -56,6 +58,7 @@ function drawDuo() {
 function drawTrucks() {
     if (gameStarted) {
         trucks.forEach(truck => {
+            truck.y = Math.min(canvas.height - CYBERTRUCK_HEIGHT, truck.y);
             ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
         });
     }
@@ -71,46 +74,30 @@ function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
 
-    // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 0.5;
-        
-        // 落地檢查
+        if (isGliding) {
+            jumpVelocity += GLIDE_REDUCE;
+        } else {
+            jumpVelocity += GRAVITY;
+        }
+
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
-            canDoubleJump = true;
+            isGliding = false;
         }
     }
 
-    // 移動卡車並檢查碰撞
-    for (let i = 0; i < trucks.length; i++) {
-        const truck = trucks[i];
-        const nextTruck = trucks[i + 1];
-
-        // 卡车行驶逻辑
-        if (nextTruck) {
-            const distanceToNext = nextTruck.x - (truck.x + CYBERTRUCK_WIDTH);
-            if (distanceToNext < MIN_GAP) {
-                // 如果下一辆车距离太近，减速
-                truck.speed = Math.min(truck.speed, nextTruck.speed - 0.5);
-            } else {
-                // 如果有足够距离，可以恢复正常速度
-                truck.speed = 4 + Math.random() * 4;
-            }
-        }
-
+    trucks.forEach(truck => {
         truck.x -= truck.speed;
-        
-        // 如果卡車超出畫布，重置位置並增加分數
+
         if (truck.x < -CYBERTRUCK_WIDTH) {
             truck.x = canvas.width + Math.random() * 300;
             truck.speed = 4 + Math.random() * 4;
             score += 100;
         }
 
-        // 碰撞檢測
         if (
             duoX < truck.x + CYBERTRUCK_WIDTH &&
             duoX + DUO_WIDTH > truck.x &&
@@ -120,11 +107,11 @@ function update() {
             isGameOver = true;
             deathSound.play();
             drawSpark(duoX - 80, duoY - 100);
+            bgMusic.pause();
             document.getElementById("gameOver").style.display = "block";
-            console.log("🛑 Game Over - Collision Detected");
             return;
         }
-    }
+    });
 
     drawDuo();
     drawTrucks();
@@ -132,27 +119,30 @@ function update() {
     requestAnimationFrame(update);
 }
 
-// 處理 Space 按鍵啟動遊戲和跳躍
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
         if (!gameStarted) {
             gameStarted = true;
             isJumping = true;
-            jumpVelocity = -18;
-            canDoubleJump = true;
+            jumpVelocity = JUMP_VELOCITY;
+            bgMusic.play();
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
             update();
         } else if (!isJumping && !isGameOver) {
             isJumping = true;
-            jumpVelocity = -18;
-        } else if (isJumping && canDoubleJump && !isGameOver) {
-            jumpVelocity = -18;
-            canDoubleJump = false;
+            jumpVelocity = JUMP_VELOCITY;
         }
+        isGliding = true;
     }
 
     if (e.code === "Space" && isGameOver) {
         location.reload();
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    if (e.code === "Space") {
+        isGliding = false;
     }
 });
