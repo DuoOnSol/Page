@@ -6,7 +6,7 @@ const gameArea = document.getElementById('gameArea');
 const BLUE_ZONE_HEIGHT = 150;
 
 // Rocket movement settings
-const rocketSpeed = 5;
+const rocketSpeed = 8;
 let rocketY = 0;
 
 // Restrict rocket movement to the blue zone
@@ -25,5 +25,5 @@ document.addEventListener('keydown', (event) => {
 });
 
 // Ensure the rocket starts within the blue zone
-rocket.style.top = '0px';
-rocket.style.left = '100px';
+rocket.style.top = '20px';
+rocket.style.left = 'calc(50% - 30px)';
