@@ -1,115 +1,93 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-canvas.width = 800;
-canvas.height = 400;
 
-let duo = {
-    x: 50,
-    y: 320,
-    width: 32,
-    height: 32,
-    dy: 0,
-    jumpPower: -60,
-    gravity: 2,
-    image: new Image(),
-};
+const DUO_HEIGHT = 32;
+const DUO_WIDTH = 32;
+const CYBERTRUCK_WIDTH = 64;
+const CYBERTRUCK_HEIGHT = 32;
+const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 
-duo.image.src = "img/food.png";
-
-class Truck {
-    constructor(x, speed) {
-        this.x = x;
-        this.y = 320;
-        this.width = 96;
-        this.height = 64;
-        this.speed = speed;
-        this.image = new Image();
-        this.image.src = "img/cybertruck.png";
-    }
-
-    draw() {
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    }
-
-    update() {
-        this.x -= this.speed;
-        if (this.x + this.width < 0) {
-            this.x = canvas.width + Math.random() * 300;
-        }
-    }
-}
+let duoX = 100;
+let duoY = canvas.height - DUO_HEIGHT;
+let isJumping = false;
+let jumpVelocity = 0;
 
 let trucks = [
-    new Truck(canvas.width, 6),
-    new Truck(canvas.width + 400, 9)
+    { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
+    { x: canvas.width + 300, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 4 }
 ];
 
 let score = 0;
-let isJumping = false;
-let isGameStarted = false;
 let isGameOver = false;
+let gameStarted = false;
 
-// 加入音效
-const deadSound = new Audio("audio/dead.mp3");
+const duoImg = new Image();
+duoImg.src = "duo.png";
 
-// 讓 Space 開始遊戲
-document.addEventListener("keydown", (e) => {
-    if (!isGameStarted && (e.key === " " || e.key === "ArrowUp")) {
-        isGameStarted = true;
-        isGameOver = false;
-        score = 0;
-        duo.y = 320;
-        duo.dy = 0;
-        trucks.forEach(truck => truck.x = canvas.width + Math.random() * 300);
-        document.getElementById("game-over").style.display = "none";
-        draw();
-    }
+const truckImg = new Image();
+truckImg.src = "cybertruck.png";
 
-    // 跳躍邏輯
-    if (isGameStarted && !isGameOver && (e.key === " " || e.key === "ArrowUp")) {
-        if (!isJumping) {
-            isJumping = true;
-            duo.dy = duo.jumpPower;
-        }
-    }
-});
+function drawDuo() {
+    ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
+}
 
-function draw() {
-    if (!isGameStarted || isGameOver) return;
+function drawTrucks() {
+    trucks.forEach(truck => {
+        ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
+    });
+}
+
+function update() {
+    if (isGameOver) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(duo.image, duo.x, duo.y, duo.width, duo.height);
-
-    trucks.forEach(truck => {
-        truck.update();
-        truck.draw();
-
-        // 碰撞檢測
-        if (
-            duo.x < truck.x + truck.width &&
-            duo.x + duo.width > truck.x &&
-            duo.y < truck.y + truck.height &&
-            duo.y + duo.height > truck.y
-        ) {
-            deadSound.play();
-            isGameOver = true;
-            isGameStarted = false;
-            document.getElementById("game-over").style.display = "block";
-        }
-    });
 
     if (isJumping) {
-        duo.dy += duo.gravity;
-        duo.y += duo.dy;
-        if (duo.y >= 320) {
-            duo.y = 320;
-            duo.dy = 0;
+        duoY += jumpVelocity;
+        jumpVelocity += 2;
+        if (duoY >= canvas.height - DUO_HEIGHT) {
+            duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
         }
     }
 
-    score++;
-    document.getElementById("score").textContent = "Score: " + score;
+    trucks.forEach(truck => {
+        truck.x -= truck.speed;
+        if (truck.x < -CYBERTRUCK_WIDTH) {
+            truck.x = canvas.width + Math.random() * 300;
+            truck.speed = 4 + Math.random() * 4;
+            score++;
+        }
 
-    requestAnimationFrame(draw);
+        if (
+            duoX < truck.x + CYBERTRUCK_WIDTH &&
+            duoX + DUO_WIDTH > truck.x &&
+            duoY < truck.y + CYBERTRUCK_HEIGHT &&
+            duoY + DUO_HEIGHT > truck.y
+        ) {
+            isGameOver = true;
+            document.getElementById("game-over").style.display = "block";
+        }
+    });
+
+    drawDuo();
+    drawTrucks();
+    document.getElementById("score").innerText = "Score: " + score;
+    requestAnimationFrame(update);
 }
+
+document.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && !isJumping && !isGameOver) {
+        isJumping = true;
+        jumpVelocity = -20;
+    }
+    if (e.code === "Space" && isGameOver) {
+        location.reload();
+    }
+});
+
+duoImg.onload = () => {
+    truckImg.onload = () => {
+        update();
+    };
+};
