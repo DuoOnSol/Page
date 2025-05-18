@@ -3,8 +3,8 @@ const ctx = canvas.getContext("2d");
 
 const DUO_HEIGHT = 32;
 const DUO_WIDTH = 32;
-const CYBERTRUCK_WIDTH = 64 * 1.45;
-const CYBERTRUCK_HEIGHT = 32 * 1.45;
+const CYBERTRUCK_WIDTH = 64 * 1.3;
+const CYBERTRUCK_HEIGHT = 32 * 1.3;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 
 let duoX = 100;
@@ -24,18 +24,18 @@ let gameStarted = false;
 
 // 初始化圖片
 const duoImg = new Image();
-duoImg.src = "./img/duo.png";
+duoImg.src = "img/duo.png";
 
 const truckImg = new Image();
-truckImg.src = "./img/cybertruck.png";
+truckImg.src = "img/cybertruck.png";
 
 const sparkImg = new Image();
-sparkImg.src = "./img/spark.png";
+sparkImg.src = "img/spark.png";
 
 const backgroundImg = new Image();
-backgroundImg.src = "./img/road.png";
+backgroundImg.src = "img/road.png";
 
-const deathSound = new Audio("./audio/death.mp3");
+const deathSound = new Audio("audio/death.mp3");
 
 // 圖片載入測試
 duoImg.onload = () => console.log("✅ Duo image loaded");
