@@ -7,7 +7,7 @@ const BLUE_ZONE_HEIGHT = 150;
 
 // Rocket movement settings
 const rocketSpeed = 8;
-let rocketY = 0;
+let rocketY = 20;
 
 // Restrict rocket movement to the blue zone
 function moveRocket(up) {
