@@ -6,7 +6,9 @@ const DUO_WIDTH = 32;
 const CYBERTRUCK_WIDTH = 64 * 1.45;
 const CYBERTRUCK_HEIGHT = 32 * 1.45;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
-const MIN_GAP = CYBERTRUCK_WIDTH + 50; // 卡车之间的最小间距
+const MIN_GAP = CYBERTRUCK_WIDTH + 50;
+const INITIAL_JUMP_VELOCITY = -18;
+const SECOND_JUMP_VELOCITY = -9; // 第二次跳的高度是第一次的一半
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -14,6 +16,7 @@ let isJumping = false;
 let jumpVelocity = 0;
 let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
 let canDoubleJump = true;
+let firstJumpDone = false;
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -75,12 +78,13 @@ function update() {
     if (isJumping) {
         duoY += jumpVelocity;
         jumpVelocity += 0.5;
-        
+
         // 落地檢查
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
             canDoubleJump = true;
+            firstJumpDone = false;
         }
     }
 
@@ -93,10 +97,8 @@ function update() {
         if (nextTruck) {
             const distanceToNext = nextTruck.x - (truck.x + CYBERTRUCK_WIDTH);
             if (distanceToNext < MIN_GAP) {
-                // 如果下一辆车距离太近，减速
                 truck.speed = Math.min(truck.speed, nextTruck.speed - 0.5);
             } else {
-                // 如果有足够距离，可以恢复正常速度
                 truck.speed = 4 + Math.random() * 4;
             }
         }
@@ -138,16 +140,18 @@ document.addEventListener("keydown", (e) => {
         if (!gameStarted) {
             gameStarted = true;
             isJumping = true;
-            jumpVelocity = -18;
+            jumpVelocity = INITIAL_JUMP_VELOCITY;
             canDoubleJump = true;
+            firstJumpDone = false;
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
             update();
         } else if (!isJumping && !isGameOver) {
             isJumping = true;
-            jumpVelocity = -18;
-        } else if (isJumping && canDoubleJump && !isGameOver) {
-            jumpVelocity = -18;
+            jumpVelocity = INITIAL_JUMP_VELOCITY;
+            firstJumpDone = true;
+        } else if (isJumping && canDoubleJump && !isGameOver && firstJumpDone) {
+            jumpVelocity = SECOND_JUMP_VELOCITY;
             canDoubleJump = false;
         }
     }
