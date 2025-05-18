@@ -9,14 +9,13 @@ let duo = {
     width: 32,
     height: 32,
     dy: 0,
-    jumpPower: -60,  // 調整跳躍高度 (5倍)
+    jumpPower: -60,
     gravity: 2,
     image: new Image(),
 };
 
 duo.image.src = "img/duo.png";
 
-// 車子設定
 class Truck {
     constructor(x, speed) {
         this.x = x;
