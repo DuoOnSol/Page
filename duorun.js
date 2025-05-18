@@ -13,7 +13,7 @@ const MIN_GAP = CYBERTRUCK_WIDTH + 50;
 const INITIAL_JUMP_VELOCITY = -10;
 const SECOND_JUMP_VELOCITY = -5;
 const GLIDE_REDUCE = -2;
-const ROCKET_SPEED = 3;
+const ROCKET_SPEED = 1;
 const ROCKET_RESPAWN_DELAY = 10000; // 火箭重生間隔
 
 let duoX = 100;
