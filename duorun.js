@@ -23,10 +23,10 @@ let isGameOver = false;
 let gameStarted = false;
 
 const duoImg = new Image();
-duoImg.src = "duo.png";
+duoImg.src = "img/food.png";
 
 const truckImg = new Image();
-truckImg.src = "cybertruck.png";
+truckImg.src = "img/cybertruck.png";
 
 const deathSound = new Audio("audio/death.mp3"); // 加入死亡音效
 
