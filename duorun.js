@@ -37,7 +37,7 @@ backgroundImg.src = "img/road.png";
 const deathSound = new Audio("audio/death.mp3");
 
 function drawBackground() {
-    ctx.globalAlpha = 0.5; // 淡化背景
+    ctx.globalAlpha = 0.3; // 淡化背景
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     ctx.globalAlpha = 1.0; // 恢復正常透明度
 }
