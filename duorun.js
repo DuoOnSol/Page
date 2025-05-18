@@ -9,7 +9,7 @@ const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 const MIN_GAP = CYBERTRUCK_WIDTH + 50;
 const INITIAL_JUMP_VELOCITY = -18;
 const SECOND_JUMP_VELOCITY = -9;
-const GLIDE_REDUCE = -5; // 滑翔時減緩下降速度
+const GLIDE_REDUCE = -5;
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -21,8 +21,19 @@ let firstJumpDone = false;
 let isGliding = false;
 
 let trucks = [
-    { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
-    { x: canvas.width + 300, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 4 }
+    { 
+        x: canvas.width, 
+        y: canvas.height - CYBERTRUCK_HEIGHT, 
+        speed: 6, 
+        verticalSpeed: 2, 
+        originalY: canvas.height - CYBERTRUCK_HEIGHT,
+        direction: 1 
+    },
+    { 
+        x: canvas.width + 300, 
+        y: canvas.height - CYBERTRUCK_HEIGHT, 
+        speed: 4 
+    }
 ];
 
 let score = 0;
@@ -61,7 +72,18 @@ function drawDuo() {
 
 function drawTrucks() {
     if (gameStarted) {
-        trucks.forEach(truck => {
+        trucks.forEach((truck, index) => {
+            // 如果是第一台卡車，讓它上下滑行
+            if (index === 0) {
+                const laneHeight = CYBERTRUCK_HEIGHT * 3;
+                truck.y += truck.verticalSpeed * truck.direction;
+
+                // 如果超過車道範圍，反轉方向
+                if (truck.y > truck.originalY || truck.y < truck.originalY - laneHeight) {
+                    truck.direction *= -1;
+                }
+            }
+
             ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
         });
     }
@@ -80,7 +102,7 @@ function update() {
     // 處理跳躍和滑翔邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 0.5;  // 重力
+        jumpVelocity += 0.5;
 
         // 如果在滑翔，減緩下降速度
         if (isGliding && jumpVelocity > 0) {
@@ -130,7 +152,7 @@ function update() {
         ) {
             isGameOver = true;
             deathSound.play();
-            bgMusic.pause(); // 停止背景音樂
+            bgMusic.pause();
             drawSpark(duoX - 80, duoY - 100);
             document.getElementById("gameOver").style.display = "block";
             console.log("🛑 Game Over - Collision Detected");
@@ -153,7 +175,7 @@ document.addEventListener("keydown", (e) => {
             jumpVelocity = INITIAL_JUMP_VELOCITY;
             canDoubleJump = true;
             firstJumpDone = false;
-            bgMusic.play();  // 播放背景音樂
+            bgMusic.play();
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
             update();
