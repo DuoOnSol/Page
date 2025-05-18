@@ -19,9 +19,9 @@ duo.image.src = "img/duo.png";
 // 車子改成三倍大的 duo.jpg
 let truck = {
     x: canvas.width,
-    y: 240, // 調整位置讓車子在地上
-    width: 96, // 32 * 3 = 96
-    height: 96, // 32 * 3 = 96
+    y: 240,
+    width: 96,
+    height: 96,
     speed: 6,
     image: new Image(),
 };
@@ -31,6 +31,7 @@ truck.image.src = "img/cybertruck.jpg";
 let score = 0;
 let isJumping = false;
 let isGameStarted = false;
+let isGameOver = false;
 
 // 加入音效
 const deadSound = new Audio("audio/dead.mp3");
@@ -39,15 +40,19 @@ const deadSound = new Audio("audio/dead.mp3");
 document.getElementById("start-button").addEventListener("click", () => {
     document.getElementById("start-screen").style.display = "none";
     isGameStarted = true;
+    isGameOver = false;
     truck.x = canvas.width;
     score = 0;
+    duo.y = 320;
+    duo.dy = 0;
     draw();
 });
 
 // 重置遊戲邏輯
 document.getElementById("restart-button").addEventListener("click", () => {
-    document.getElementById("game-over-screen").style.display = "none";
     isGameStarted = true;
+    isGameOver = false;
+    document.getElementById("game-over-screen").style.display = "none";
     truck.x = canvas.width;
     score = 0;
     duo.y = 320;
@@ -56,7 +61,7 @@ document.getElementById("restart-button").addEventListener("click", () => {
 });
 
 function draw() {
-    if (!isGameStarted) return;
+    if (!isGameStarted || isGameOver) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(duo.image, duo.x, duo.y, duo.width, duo.height);
@@ -87,6 +92,7 @@ function draw() {
     ) {
         deadSound.play();
         isGameStarted = false;
+        isGameOver = true;
         document.getElementById("final-score").textContent = score;
         document.getElementById("game-over-screen").style.display = "flex";
     }
@@ -97,7 +103,7 @@ function draw() {
 }
 
 document.addEventListener("keydown", (e) => {
-    if (isGameStarted && (e.key === " " || e.key === "ArrowUp")) {
+    if (isGameStarted && !isGameOver && (e.key === " " || e.key === "ArrowUp")) {
         if (!isJumping) {
             isJumping = true;
             duo.dy = duo.jumpPower;
