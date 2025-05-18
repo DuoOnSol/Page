@@ -55,7 +55,7 @@ function update() {
     // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 1.5;
+        jumpVelocity += 1.2;
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
@@ -94,7 +94,7 @@ function update() {
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !isJumping && !isGameOver) {
         isJumping = true;
-        jumpVelocity = -20;
+        jumpVelocity = -16;
         document.getElementById("startHint").style.display = "none";
         gameStarted = true;
     }
