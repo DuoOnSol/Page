@@ -3,8 +3,8 @@ const ctx = canvas.getContext("2d");
 
 const DUO_HEIGHT = 32;
 const DUO_WIDTH = 32;
-const CYBERTRUCK_WIDTH = 64;
-const CYBERTRUCK_HEIGHT = 32;
+const CYBERTRUCK_WIDTH = 64 * 3;
+const CYBERTRUCK_HEIGHT = 32 * 3;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
 
 let duoX = 100;
