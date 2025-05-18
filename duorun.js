@@ -57,13 +57,17 @@ function drawBackground() {
 }
 
 function drawDuo() {
-    ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
+    if (gameStarted) {
+        ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
+    }
 }
 
 function drawTrucks() {
-    trucks.forEach(truck => {
-        ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
-    });
+    if (gameStarted) {
+        trucks.forEach(truck => {
+            ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
+        });
+    }
 }
 
 function drawSpark(x, y) {
@@ -76,15 +80,17 @@ function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
 
+    // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
-        jumpVelocity += 1.0;  // 減少重力加速度，讓下降慢一點
+        jumpVelocity += 0.8;  // 減少重力加速度
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
         }
     }
 
+    // 移動卡車並檢查碰撞
     trucks.forEach(truck => {
         truck.x -= truck.speed;
         if (truck.x < -CYBERTRUCK_WIDTH) {
@@ -114,26 +120,19 @@ function update() {
     requestAnimationFrame(update);
 }
 
+// 處理 Space 按鍵啟動遊戲
 document.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && !isJumping && !isGameOver) {
+    if (e.code === "Space" && !gameStarted) {
+        gameStarted = true;
         isJumping = true;
         jumpVelocity = -18;
         document.getElementById("startHint").style.display = "none";
-        gameStarted = true;
+        update();
+    } else if (e.code === "Space" && !isJumping && !isGameOver) {
+        isJumping = true;
+        jumpVelocity = -18;
     }
     if (e.code === "Space" && isGameOver) {
         location.reload();
     }
 });
-
-// 確保所有圖片都載入完畢後再開始遊戲
-backgroundImg.onload = () => {
-    duoImg.onload = () => {
-        truckImg.onload = () => {
-            sparkImg.onload = () => {
-                console.log("🚀 All images loaded, starting game...");
-                update();
-            };
-        };
-    };
-};
