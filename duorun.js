@@ -11,6 +11,7 @@ let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
 let isJumping = false;
 let jumpVelocity = 0;
+let maxJumpHeight = canvas.height - DUO_HEIGHT - JUMP_HEIGHT;
 
 let trucks = [
     { x: canvas.width, y: canvas.height - CYBERTRUCK_HEIGHT, speed: 6 },
@@ -22,10 +23,12 @@ let isGameOver = false;
 let gameStarted = false;
 
 const duoImg = new Image();
-duoImg.src = "img/food.png";
+duoImg.src = "duo.png";
 
 const truckImg = new Image();
-truckImg.src = "img/cybertruck.png";
+truckImg.src = "cybertruck.png";
+
+const deathSound = new Audio("audio/death.mp3"); // 加入死亡音效
 
 function drawDuo() {
     ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
@@ -42,12 +45,15 @@ function update() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // 處理跳躍邏輯
     if (isJumping) {
         duoY += jumpVelocity;
         jumpVelocity += 2;
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
+        } else if (duoY < maxJumpHeight) {
+            jumpVelocity = 12;  // 到達最高點開始下降
         }
     }
 
@@ -59,6 +65,7 @@ function update() {
             score++;
         }
 
+        // 碰撞偵測
         if (
             duoX < truck.x + CYBERTRUCK_WIDTH &&
             duoX + DUO_WIDTH > truck.x &&
@@ -66,7 +73,8 @@ function update() {
             duoY + DUO_HEIGHT > truck.y
         ) {
             isGameOver = true;
-            document.getElementById("game-over").style.display = "block";
+            document.getElementById("gameOver").style.display = "block";
+            deathSound.play(); // 播放死亡音效
         }
     });
 
@@ -79,7 +87,9 @@ function update() {
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !isJumping && !isGameOver) {
         isJumping = true;
-        jumpVelocity = -12;
+        jumpVelocity = -15;
+        document.getElementById("startHint").style.display = "none";
+        gameStarted = true;
     }
     if (e.code === "Space" && isGameOver) {
         location.reload();
