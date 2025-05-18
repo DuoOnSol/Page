@@ -6,6 +6,7 @@ const DUO_WIDTH = 32;
 const CYBERTRUCK_WIDTH = 64 * 1.45;
 const CYBERTRUCK_HEIGHT = 32 * 1.45;
 const JUMP_HEIGHT = CYBERTRUCK_HEIGHT * 5;
+const MIN_GAP = CYBERTRUCK_WIDTH + 50; // 卡车之间的最小间距
 
 let duoX = 100;
 let duoY = canvas.height - DUO_HEIGHT;
@@ -39,19 +40,6 @@ backgroundImg.src = "./img/road.png";
 const deathSound = new Audio("./audio/death.mp3");
 const bgMusic = new Audio("./audio/music.mid");
 bgMusic.loop = true;
-
-// 圖片載入測試
-duoImg.onload = () => console.log("✅ Duo image loaded");
-truckImg.onload = () => console.log("✅ Truck image loaded");
-sparkImg.onload = () => console.log("✅ Spark image loaded");
-backgroundImg.onload = () => console.log("✅ Background image loaded");
-deathSound.onloadeddata = () => console.log("✅ Death sound loaded");
-
-// 圖片載入錯誤測試
-duoImg.onerror = () => console.error("❌ Failed to load duo.png");
-truckImg.onerror = () => console.error("❌ Failed to load cybertruck.png");
-sparkImg.onerror = () => console.error("❌ Failed to load spark.png");
-backgroundImg.onerror = () => console.error("❌ Failed to load road.png");
 
 function drawBackground() {
     ctx.globalAlpha = 0.3;
@@ -92,19 +80,37 @@ function update() {
         if (duoY >= canvas.height - DUO_HEIGHT) {
             duoY = canvas.height - DUO_HEIGHT;
             isJumping = false;
-            canDoubleJump = true;  // 允許再次跳躍
+            canDoubleJump = true;
         }
     }
 
     // 移動卡車並檢查碰撞
-    trucks.forEach(truck => {
+    for (let i = 0; i < trucks.length; i++) {
+        const truck = trucks[i];
+        const nextTruck = trucks[i + 1];
+
+        // 卡车行驶逻辑
+        if (nextTruck) {
+            const distanceToNext = nextTruck.x - (truck.x + CYBERTRUCK_WIDTH);
+            if (distanceToNext < MIN_GAP) {
+                // 如果下一辆车距离太近，减速
+                truck.speed = Math.min(truck.speed, nextTruck.speed - 0.5);
+            } else {
+                // 如果有足够距离，可以恢复正常速度
+                truck.speed = 4 + Math.random() * 4;
+            }
+        }
+
         truck.x -= truck.speed;
+        
+        // 如果卡車超出畫布，重置位置並增加分數
         if (truck.x < -CYBERTRUCK_WIDTH) {
             truck.x = canvas.width + Math.random() * 300;
             truck.speed = 4 + Math.random() * 4;
             score += 100;
         }
 
+        // 碰撞檢測
         if (
             duoX < truck.x + CYBERTRUCK_WIDTH &&
             duoX + DUO_WIDTH > truck.x &&
@@ -118,7 +124,7 @@ function update() {
             console.log("🛑 Game Over - Collision Detected");
             return;
         }
-    });
+    }
 
     drawDuo();
     drawTrucks();
@@ -142,7 +148,7 @@ document.addEventListener("keydown", (e) => {
             jumpVelocity = -18;
         } else if (isJumping && canDoubleJump && !isGameOver) {
             jumpVelocity = -18;
-            canDoubleJump = false;  // 禁止再次二段跳
+            canDoubleJump = false;
         }
     }
 
