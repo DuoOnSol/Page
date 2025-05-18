@@ -14,7 +14,7 @@ let duo = {
     image: new Image(),
 };
 
-duo.image.src = "img/duo.png";
+duo.image.src = "img/food.png";
 
 class Truck {
     constructor(x, speed) {
