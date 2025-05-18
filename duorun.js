@@ -31,7 +31,16 @@ truckImg.src = "img/cybertruck.png";
 const sparkImg = new Image();
 sparkImg.src = "img/spark.png";
 
+const backgroundImg = new Image();
+backgroundImg.src = "img/road.png";
+
 const deathSound = new Audio("audio/death.mp3");
+
+function drawBackground() {
+    ctx.globalAlpha = 0.5; // 淡化背景
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1.0; // 恢復正常透明度
+}
 
 function drawDuo() {
     ctx.drawImage(duoImg, duoX, duoY, DUO_WIDTH, DUO_HEIGHT);
@@ -51,6 +60,9 @@ function update() {
     if (isGameOver) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 畫背景
+    drawBackground();
 
     // 處理跳躍邏輯
     if (isJumping) {
@@ -78,8 +90,8 @@ function update() {
             duoY + DUO_HEIGHT > truck.y
         ) {
             isGameOver = true;
-            deathSound.play(); // 播放死亡音效
-            drawSpark(duoX - 80, duoY - 100); // 顯示火花效果
+            deathSound.play();
+            drawSpark(duoX - 80, duoY - 100);
             document.getElementById("gameOver").style.display = "block";
             return;
         }
@@ -94,7 +106,7 @@ function update() {
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !isJumping && !isGameOver) {
         isJumping = true;
-        jumpVelocity = -16;
+        jumpVelocity = -18;
         document.getElementById("startHint").style.display = "none";
         gameStarted = true;
     }
@@ -103,10 +115,12 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-duoImg.onload = () => {
-    truckImg.onload = () => {
-        sparkImg.onload = () => {
-            update();
+backgroundImg.onload = () => {
+    duoImg.onload = () => {
+        truckImg.onload = () => {
+            sparkImg.onload = () => {
+                update();
+            };
         };
     };
 };
