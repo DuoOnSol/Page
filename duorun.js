@@ -1,116 +1,68 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-canvas.width = 800;
-canvas.height = 400;
-
-let duo = {
-    x: 50,
-    y: 320,
-    width: 32,
-    height: 32,
-    dy: 0,
-    jumpPower: -60,  // 調整跳躍高度 (5倍)
-    gravity: 2,
-    image: new Image(),
-};
-
-duo.image.src = "img/duo.png";
-
-// 車子設定
-class Truck {
-    constructor(x, speed) {
-        this.x = x;
-        this.y = 320;
-        this.width = 96;
-        this.height = 64;
-        this.speed = speed;
-        this.image = new Image();
-        this.image.src = "img/cybertruck.png";
-    }
-
-    draw() {
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    }
-
-    update() {
-        this.x -= this.speed;
-        if (this.x + this.width < 0) {
-            this.x = canvas.width + Math.random() * 300;
-        }
-    }
+body {
+    margin: 0;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
 }
 
-let trucks = [
-    new Truck(canvas.width, 6),
-    new Truck(canvas.width + 400, 9)
-];
+.navbar {
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
-let score = 0;
-let isJumping = false;
-let isGameStarted = false;
-let isGameOver = false;
+.navbar button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-// 加入音效
-const deadSound = new Audio("audio/dead.mp3");
+.navbar button:hover {
+    background-color: #0056b3;
+}
 
-// 讓 Space 開始遊戲
-document.addEventListener("keydown", (e) => {
-    if (!isGameStarted && (e.key === " " || e.key === "ArrowUp")) {
-        isGameStarted = true;
-        isGameOver = false;
-        score = 0;
-        duo.y = 320;
-        duo.dy = 0;
-        trucks.forEach(truck => truck.x = canvas.width + Math.random() * 300);
-        document.getElementById("game-over").style.display = "none";
-        draw();
-    }
+.game-container {
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
 
-    // 跳躍邏輯
-    if (isGameStarted && !isGameOver && (e.key === " " || e.key === "ArrowUp")) {
-        if (!isJumping) {
-            isJumping = true;
-            duo.dy = duo.jumpPower;
-        }
-    }
-});
+canvas {
+    background-color: #ffffff;
+    border: 5px solid #388e3c;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
 
-function draw() {
-    if (!isGameStarted || isGameOver) return;
+#score {
+    font-size: 24px;
+    margin: 20px;
+    color: #333;
+    font-weight: bold;
+}
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(duo.image, duo.x, duo.y, duo.width, duo.height);
-
-    trucks.forEach(truck => {
-        truck.update();
-        truck.draw();
-
-        // 碰撞檢測
-        if (
-            duo.x < truck.x + truck.width &&
-            duo.x + duo.width > truck.x &&
-            duo.y < truck.y + truck.height &&
-            duo.y + duo.height > truck.y
-        ) {
-            deadSound.play();
-            isGameOver = true;
-            isGameStarted = false;
-            document.getElementById("game-over").style.display = "block";
-        }
-    });
-
-    if (isJumping) {
-        duo.dy += duo.gravity;
-        duo.y += duo.dy;
-        if (duo.y >= 320) {
-            duo.y = 320;
-            duo.dy = 0;
-            isJumping = false;
-        }
-    }
-
-    score++;
-    document.getElementById("score").textContent = "Score: " + score;
-
-    requestAnimationFrame(draw);
+#game-over {
+    font-size: 4em;
+    color: red;
+    text-align: center;
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 1000;
 }
