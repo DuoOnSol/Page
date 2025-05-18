@@ -36,28 +36,26 @@ let isGameOver = false;
 // 加入音效
 const deadSound = new Audio("audio/dead.mp3");
 
-// 開始按鈕邏輯
-document.getElementById("start-button").addEventListener("click", () => {
-    document.getElementById("start-screen").style.display = "none";
-    isGameStarted = true;
-    isGameOver = false;
-    truck.x = canvas.width;
-    score = 0;
-    duo.y = 320;
-    duo.dy = 0;
-    draw();
-});
+// 讓 Space 開始遊戲
+document.addEventListener("keydown", (e) => {
+    if (!isGameStarted && (e.key === " " || e.key === "ArrowUp")) {
+        isGameStarted = true;
+        isGameOver = false;
+        score = 0;
+        truck.x = canvas.width;
+        duo.y = 320;
+        duo.dy = 0;
+        document.getElementById("game-over").style.display = "none";
+        draw();
+    }
 
-// 重置遊戲邏輯
-document.getElementById("restart-button").addEventListener("click", () => {
-    isGameStarted = true;
-    isGameOver = false;
-    document.getElementById("game-over-screen").style.display = "none";
-    truck.x = canvas.width;
-    score = 0;
-    duo.y = 320;
-    duo.dy = 0;
-    draw();
+    // 跳躍邏輯
+    if (isGameStarted && !isGameOver && (e.key === " " || e.key === "ArrowUp")) {
+        if (!isJumping) {
+            isJumping = true;
+            duo.dy = duo.jumpPower;
+        }
+    }
 });
 
 function draw() {
@@ -91,22 +89,12 @@ function draw() {
         duo.y + duo.height > truck.y
     ) {
         deadSound.play();
-        isGameStarted = false;
         isGameOver = true;
-        document.getElementById("final-score").textContent = score;
-        document.getElementById("game-over-screen").style.display = "flex";
+        isGameStarted = false;
+        document.getElementById("game-over").style.display = "block";
     }
 
     document.getElementById("score").textContent = "Score: " + score;
 
     requestAnimationFrame(draw);
 }
-
-document.addEventListener("keydown", (e) => {
-    if (isGameStarted && !isGameOver && (e.key === " " || e.key === "ArrowUp")) {
-        if (!isJumping) {
-            isJumping = true;
-            duo.dy = duo.jumpPower;
-        }
-    }
-});
