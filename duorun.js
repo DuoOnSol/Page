@@ -21,6 +21,7 @@ let firstJumpDone = false;
 let isGliding = false;
 
 let trucks = [];
+let rockets = [];
 let score = 0;
 let isGameOver = false;
 let gameStarted = false;
@@ -34,6 +35,9 @@ truckImg.src = "./img/cybertruck.png";
 
 const sparkImg = new Image();
 sparkImg.src = "./img/spark.png";
+
+const rocketImg = new Image();
+rocketImg.src = "./img/rocket.png";
 
 const backgroundImg = new Image();
 backgroundImg.src = "./img/road.png";
@@ -62,6 +66,19 @@ function resetTrucks() {
     ];
 }
 
+// 初始化火箭
+function resetRockets() {
+    rockets = [
+        {
+            x: canvas.width + 500,
+            y: Math.random() * (canvas.height - 200),
+            speed: 8,
+            verticalSpeed: 2,
+            direction: Math.random() < 0.5 ? 1 : -1
+        }
+    ];
+}
+
 // 重置遊戲狀態
 function resetGame() {
     duoY = canvas.height - DUO_HEIGHT;
@@ -72,6 +89,7 @@ function resetGame() {
     isGameOver = false;
     gameStarted = false;
     resetTrucks();
+    resetRockets();
     document.getElementById("gameOver").style.display = "none";
     document.getElementById("startHint").style.display = "block";
     document.getElementById("intro-image").style.display = "block";
@@ -111,6 +129,15 @@ function drawTrucks() {
     }
 }
 
+// 畫火箭
+function drawRockets() {
+    if (gameStarted) {
+        rockets.forEach(rocket => {
+            ctx.drawImage(rocketImg, rocket.x, rocket.y, 80, 40);
+        });
+    }
+}
+
 // 畫火花
 function drawSpark(x, y) {
     ctx.drawImage(sparkImg, x, y, 200, 200);
@@ -140,19 +167,8 @@ function update() {
         }
     }
 
-    for (let i = 0; i < trucks.length; i++) {
-        const truck = trucks[i];
-        const nextTruck = trucks[i + 1];
-
-        if (nextTruck) {
-            const distanceToNext = nextTruck.x - (truck.x + CYBERTRUCK_WIDTH);
-            if (distanceToNext < MIN_GAP) {
-                truck.speed = Math.min(truck.speed, nextTruck.speed - 0.5);
-            } else {
-                truck.speed = 4 + Math.random() * 4;
-            }
-        }
-
+    // 移動卡車
+    trucks.forEach(truck => {
         truck.x -= truck.speed;
         
         if (truck.x < -CYBERTRUCK_WIDTH) {
@@ -172,13 +188,42 @@ function update() {
             bgMusic.pause();
             drawSpark(duoX - 80, duoY - 100);
             document.getElementById("gameOver").style.display = "block";
-            console.log("🛑 Game Over - Collision Detected");
             return;
         }
-    }
+    });
+
+    // 移動火箭
+    rockets.forEach(rocket => {
+        rocket.x -= rocket.speed;
+        rocket.y += rocket.verticalSpeed * rocket.direction;
+
+        if (rocket.y <= 0 || rocket.y >= canvas.height - 40) {
+            rocket.direction *= -1;
+        }
+
+        if (rocket.x < -80) {
+            rocket.x = canvas.width + Math.random() * 300;
+            rocket.y = Math.random() * (canvas.height - 200);
+        }
+
+        if (
+            duoX < rocket.x + 80 &&
+            duoX + DUO_WIDTH > rocket.x &&
+            duoY < rocket.y + 40 &&
+            duoY + DUO_HEIGHT > rocket.y
+        ) {
+            isGameOver = true;
+            deathSound.play();
+            bgMusic.pause();
+            drawSpark(duoX - 80, duoY - 100);
+            document.getElementById("gameOver").style.display = "block";
+            return;
+        }
+    });
 
     drawDuo();
     drawTrucks();
+    drawRockets();
     document.getElementById("score").innerText = "Score: " + score;
     requestAnimationFrame(update);
 }
