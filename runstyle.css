@@ -50,3 +50,19 @@ canvas {
     color: #333;
     font-weight: bold;
 }
+
+#game-over {
+    font-size: 4em;
+    color: red;
+    text-align: center;
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 1000;
+}
