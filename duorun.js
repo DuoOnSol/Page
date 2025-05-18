@@ -37,7 +37,7 @@ const backgroundImg = new Image();
 backgroundImg.src = "./img/road.png";
 
 const deathSound = new Audio("./audio/death.mp3");
-const bgMusic = new Audio("./audio/music.midi");
+const bgMusic = new Audio("./audio/music.mid");
 bgMusic.loop = true;
 
 // 圖片載入測試
