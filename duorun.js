@@ -61,10 +61,10 @@ function resetTrucks() {
             y: canvas.height - CYBERTRUCK_HEIGHT,
             speed: 4 + Math.random() * 4,
             direction: Math.random() < 0.5 ? -1 : 1,
-            maxOffset: isSnake ? 100 + Math.random() * 150 : 0, // 增加蛇行幅度
+            maxOffset: isSnake ? 100 + Math.random() * 150 : 0,
             baseY: canvas.height - CYBERTRUCK_HEIGHT,
             isSnake: isSnake,
-            snakeAmplitude: isSnake ? 100 + Math.random() * 50 : 0,
+            snakeAmplitude: isSnake ? 80 + Math.random() * 40 : 0,
             snakeAngle: Math.random() * Math.PI * 2
         });
     }
@@ -92,12 +92,13 @@ function resetGame() {
     jumpVelocity = 0;
     isJumping = false;
     isGliding = false;
+    canDoubleJump = true;
+    firstJumpDone = false;
     score = 0;
     isGameOver = false;
     gameStarted = false;
     resetTrucks();
-    rocket = null;
-    rocketCooldown = false;
+    resetRocket();
     document.getElementById("gameOver").style.display = "none";
     document.getElementById("startHint").style.display = "block";
     document.getElementById("intro-image").style.display = "block";
@@ -127,8 +128,9 @@ function drawTrucks() {
             
             // 蛇行效果
             if (truck.isSnake) {
-                truck.snakeAngle += 0.05; // 調整蛇行速度
+                truck.snakeAngle += 0.05;
                 truck.y = truck.baseY - truck.snakeAmplitude * Math.sin(truck.snakeAngle);
+                truck.y = Math.max(truck.baseY - 100, Math.min(truck.y, truck.baseY)); // 限制蛇行範圍
             }
 
             ctx.drawImage(truckImg, truck.x, truck.y, CYBERTRUCK_WIDTH, CYBERTRUCK_HEIGHT);
@@ -221,10 +223,12 @@ document.addEventListener("keydown", (e) => {
             bgMusic.play();
             document.getElementById("startHint").style.display = "none";
             document.getElementById("intro-image").style.display = "none";
-            resetRocket();
             update();
         } else if (isGameOver) {
-            resetGame();
+            resetGame();  // 🚀 加入重置遊戲功能
+        } else if (isJumping && canDoubleJump) {
+            jumpVelocity = SECOND_JUMP_VELOCITY;
+            canDoubleJump = false;
         }
     }
 });
