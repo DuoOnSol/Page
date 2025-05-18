@@ -45,9 +45,16 @@
             position: relative;
         }
 
-        #intro-image {
+        #intro-image-container {
             width: 40%;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #intro-image {
+            width: 100%;
+            border-radius: 10px;
         }
 
         canvas {
@@ -77,7 +84,9 @@
 </div>
 
 <div id="game-container">
-    <img id="intro-image" src="./img/musk.jpg" alt="Intro Image">
+    <div id="intro-image-container">
+        <img id="intro-image" src="./img/musk.jpg" alt="Intro Image">
+    </div>
     <canvas id="gameCanvas" width="1200" height="600"></canvas>
     <div id="score">Score: 0</div>
     <div id="gameOver">Game Over</div>
