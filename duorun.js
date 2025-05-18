@@ -23,30 +23,30 @@ let isGameOver = false;
 let gameStarted = false;
 
 const duoImg = new Image();
-duoImg.src = "./img/duo.png";
+duoImg.src = "img/duo.png";
 
 duoImg.onload = () => console.log("✅ Duo image loaded");
 duoImg.onerror = () => console.error("❌ Failed to load duo.png");
 
 const truckImg = new Image();
-truckImg.src = "./img/cybertruck.png";
+truckImg.src = "img/cybertruck.png";
 
 truckImg.onload = () => console.log("✅ Truck image loaded");
 truckImg.onerror = () => console.error("❌ Failed to load cybertruck.png");
 
 const sparkImg = new Image();
-sparkImg.src = "./img/spark.png";
+sparkImg.src = "img/spark.png";
 
 sparkImg.onload = () => console.log("✅ Spark image loaded");
 sparkImg.onerror = () => console.error("❌ Failed to load spark.png");
 
 const backgroundImg = new Image();
-backgroundImg.src = "./img/road.png";
+backgroundImg.src = "img/road.png";
 
 backgroundImg.onload = () => console.log("✅ Background image loaded");
 backgroundImg.onerror = () => console.error("❌ Failed to load road.png");
 
-const deathSound = new Audio("./audio/death.mp3");
+const deathSound = new Audio("audio/death.mp3");
 
 deathSound.onerror = () => console.error("❌ Failed to load death.mp3");
 
