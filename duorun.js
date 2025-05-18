@@ -22,7 +22,7 @@ let isGameOver = false;
 let gameStarted = false;
 
 const duoImg = new Image();
-duoImg.src = "img/duo.png";
+duoImg.src = "img/food.png";
 
 const truckImg = new Image();
 truckImg.src = "img/cybertruck.png";
