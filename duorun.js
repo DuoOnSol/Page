@@ -79,7 +79,7 @@ function update() {
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !isJumping && !isGameOver) {
         isJumping = true;
-        jumpVelocity = -20;
+        jumpVelocity = -12;
     }
     if (e.code === "Space" && isGameOver) {
         location.reload();
