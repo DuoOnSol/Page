@@ -1,0 +1,168 @@
+<a href="#buy" class="cta-button"><i class="fas fa-coins"></i> Buy DUO</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>THE DUOLINGO MEME COIN ON SOLANA</h1>
+                <p>Learn languages, earn DUO, and join the most entertaining community in crypto! No white paper, no utility, just pure meme energy.</p>
+                <div class="hero-buttons">
+                    <a href="#buy" class="cta-button"><i class="fas fa-bolt"></i> Buy on Pump</a>
+                    <a href="#chart" class="second-button"><i class="fas fa-chart-line"></i> View Chart</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meme Showcase -->
+    <section class="meme-showcase" id="memes">
+        <div class="container">
+            <h2 class="section-title">DUO MEMES</h2>
+            <div class="meme-grid">
+                <div class="meme-card floating">
+                    <div class="meme-img">🦉</div>
+                    <div class="meme-content">
+                        <h3>Language Learning</h3>
+                        <p>When you finally understand crypto jargon after 100 DUO lessons</p>
+                    </div>
+                </div>
+                <div class="meme-card floating" style="animation-delay: 0.5s;">
+                    <div class="meme-img">😱</div>
+                    <div class="meme-content">
+                        <h3>Notification Fear</h3>
+                        <p>That moment when Duolingo reminds you to practice... or else</p>
+                    </div>
+                </div>
+                <div class="meme-card floating" style="animation-delay: 1s;">
+                    <div class="meme-img">🚀</div>
+                    <div class="meme-content">
+                        <h3>To The Moon</h3>
+                        <p>When your DUO bags are pumping and your language skills are improving</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Info -->
+    <section class="token-info" id="about">
+        <div class="container">
+            <h2 class="section-title">TOKEN INFORMATION</h2>
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>Tokenomics</h3>
+                    <p>100% fair launch</p>
+                    <p>No team allocation</p>
+                    <p>Fully decentralized</p>
+                    <p>Community owned</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>Contract Address</h3>
+                    <p>Solana Network</p>
+                    <div class="contract-address">
+                        KFTSxPQxDV1wGjEvzKHWD7mG6e9TsMVq4eF4mQppump
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>How To Buy</h3>
+                    <p>1. Get Solana wallet</p>
+                    <p>2. Buy SOL on exchange</p>
+                    <p>3. Connect to Pump.fun</p>
+                    <p>4. Swap SOL for DUO</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="community" id="community">
+        <div class="container">
+            <h2 class="section-title">JOIN OUR COMMUNITY</h2>
+            <p>The DUO community is growing fast! Join us to share memes, learn languages, and discuss the future of DUO.</p>
+            
+            <div class="social-links">
+                <a href="https://t.me/DUO_on_Solana" class="social-link">
+<i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://x.com/duomemeonsol" class="social-link">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-reddit"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🦉</div>
+                <div class="logo-text">DUO on Solana</div>
+            </div>
+            <p>The ultimate Duolingo meme coin on Solana</p>
+            
+            <div class="disclaimer">
+                <p><strong>Disclaimer:</strong> DUO is a meme coin with no intrinsic value or expectation of financial return. There is no formal team or roadmap. The coin is completely useless and for entertainment purposes only. Please do not invest money you are not willing to lose.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation for elements when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.meme-card, .info-card').forEach(card => {
+                observer.observe(card);
+            });
+            
+            // Copy contract address functionality
+            const contractElement = document.querySelector('.contract-address');
+            if (contractElement) {
+                contractElement.addEventListener('click', function() {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = this.textContent;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    // Show feedback
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied to clipboard!';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+                
+                contractElement.style.cursor = 'pointer';
+                contractElement.title = 'Click to copy';
+            }
+        });
+    </script>
+</body>
+</html>
