@@ -1,148 +1,3 @@
-.hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 15px rgba(92, 204, 2, 0.3);
-        }
-        
-        .hero p {
-            font-size: 1.4rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .second-button {
-            background: transparent;
-            color: var(--text);
-            border: 2px solid var(--primary);
-            padding: 0.8rem 1.8rem;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .second-button:hover {
-            background: rgba(92, 204, 2, 0.1);
-        }
-        
-        /* Meme Showcase */
-        .meme-showcase {
-            padding: 5rem 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 3rem;
-            color: var(--primary);
-        }
-        
-        .meme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .meme-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-            border: 1px solid var(--card-border);
-        }
-        
-        .meme-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .meme-img {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(45deg, #3caa3c, #58cc02);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-        }
-        
-        .meme-content {
-            padding: 1.5rem;
-        }
-        
-        .meme-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        /* Token Info */
-        .token-info {
-            padding: 5rem 0;
-            background: rgba(10, 10, 10, 0.7);
-            position: relative;
-        }
-        
-        .token-info::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"><text x="50%" y="50%" font-size="80" text-anchor="middle" dominant-baseline="middle" fill="%2358cc02">DUO</text></svg>');
-            z-index: -1;
-        }
-        
-        .info-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        
-        .info-card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--card-border);
-        }
-        
-        .info-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .info-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -287,7 +142,154 @@
             text-align: center;
             position: relative;
         }
-.contract-address {
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(92, 204, 2, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .second-button {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--primary);
+            padding: 0.8rem 1.8rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .second-button:hover {
+            background: rgba(92, 204, 2, 0.1);
+        }
+        
+        /* Meme Showcase */
+        .meme-showcase {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        .meme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .meme-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--card-border);
+        }
+        
+        .meme-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .meme-img {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #3caa3c, #58cc02);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+        
+        .meme-content {
+            padding: 1.5rem;
+        }
+        
+        .meme-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* Token Info */
+        .token-info {
+            padding: 5rem 0;
+            background: rgba(10, 10, 10, 0.7);
+            position: relative;
+        }
+        
+        .token-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"><text x="50%" y="50%" font-size="80" text-anchor="middle" dominant-baseline="middle" fill="%2358cc02">DUO</text></svg>');
+            z-index: -1;
+        }
+        
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .info-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+        }
+        
+        .info-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .info-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contract-address {
             background: rgba(92, 204, 2, 0.1);
             padding: 1rem;
             border-radius: 10px;
@@ -417,7 +419,7 @@
                         <li><a href="#community">Community</a></li>
                     </ul>
                 </nav>
-<a href="#buy" class="cta-button"><i class="fas fa-coins"></i> Buy DUO</a>
+                <a href="#buy" class="cta-button"><i class="fas fa-coins"></i> Buy DUO</a>
             </div>
         </div>
     </header>
@@ -513,7 +515,7 @@
             
             <div class="social-links">
                 <a href="https://t.me/DUO_on_Solana" class="social-link">
-<i class="fab fa-telegram"></i>
+                    <i class="fab fa-telegram"></i>
                 </a>
                 <a href="https://x.com/duomemeonsol" class="social-link">
                     <i class="fab fa-twitter"></i>
